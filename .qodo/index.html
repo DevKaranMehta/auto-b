@@ -1,0 +1,2730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlockchainLatestNews - Latest Crypto & Blockchain News</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Reset and Variables - Binance/Bitcoin Theme */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        body {
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        :root {
+            /* Binance/Bitcoin Color Palette */
+            --primary-gold: #F0B90B;
+            --primary-dark: #D9A441;
+            --bitcoin-orange: #F7931A;
+            --dark-bg: #0B0E11;
+            --darker-bg: #1E2329;
+            --surface-dark: #2B3139;
+            --border-dark: #474D57;
+            --text-primary: #FAFAFA;
+            --text-secondary: #C7C7C7;
+            --text-muted: #848E9C;
+            --success: #0ECB81;
+            --warning: #F0B90B;
+            --error: #F6465D;
+            --accent-blue: #1890FF;
+            
+            /* Typography - Improved for readability */
+            --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            
+            /* Shadows & Effects */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --glow-gold: 0 0 20px rgba(240, 185, 11, 0.3);
+            --glow-orange: 0 0 20px rgba(247, 147, 26, 0.3);
+            
+            --radius: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-weight: 400;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        /* Enhanced Typography with Better Mobile Scaling */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-primary);
+            margin-bottom: 0.5em;
+        }
+
+        h1 { 
+            font-size: clamp(1.8rem, 4vw, 2.5rem); 
+            font-weight: 800; 
+        }
+        h2 { 
+            font-size: clamp(1.4rem, 3.5vw, 2rem); 
+            font-weight: 700; 
+        }
+        h3 { 
+            font-size: clamp(1.2rem, 3vw, 1.5rem); 
+            font-weight: 600; 
+        }
+        h4 { 
+            font-size: clamp(1rem, 2.5vw, 1.25rem); 
+            font-weight: 600; 
+        }
+
+        p {
+            margin-bottom: 1em;
+            line-height: 1.8;
+            font-weight: 400;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(11, 14, 17, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            width: 100%;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(1rem, 3vw, 1.5rem);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: clamp(1rem, 2.5vw, 1.75rem);
+            color: var(--primary-gold);
+            text-decoration: none;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .logo:hover {
+            text-shadow: var(--glow-gold);
+        }
+
+        .logo-icon {
+            width: clamp(30px, 6vw, 45px);
+            height: clamp(30px, 6vw, 45px);
+            animation: logoFloat 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(240, 185, 11, 0.3));
+            flex-shrink: 0;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(360deg); }
+        }
+
+        /* Desktop Navigation */
+        .nav-desktop {
+            display: flex;
+            align-items: center;
+            gap: clamp(1.5rem, 3vw, 3rem);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: clamp(1.5rem, 2.5vw, 2.5rem);
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+            padding: 0.75rem 0;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--bitcoin-orange));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-gold);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Mega Menu - Fixed for Mobile */
+        .mega-menu {
+            position: absolute;
+            top: 100%;
+            left: -2rem;
+            background: var(--darker-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem;
+            min-width: 700px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px);
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .nav-item:hover .mega-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .mega-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+        }
+
+        .mega-menu-section h4 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-gold);
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .mega-menu-section ul {
+            list-style: none;
+        }
+
+        .mega-menu-section li {
+            margin-bottom: 0.75rem;
+        }
+
+        .mega-menu-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+            font-weight: 400;
+            transition: var(--transition);
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        .mega-menu-section a:hover {
+            color: var(--primary-gold);
+            padding-left: 0.5rem;
+        }
+
+        /* Search Box */
+        .search-container {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem;
+            padding-right: 3rem;
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius);
+            font-family: var(--font-primary);
+            width: clamp(200px, 15vw, 320px);
+            background: var(--surface-dark);
+            color: var(--text-primary);
+            transition: var(--transition);
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 3px rgba(240, 185, 11, 0.2);
+            background: var(--darker-bg);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Mobile Menu - Updated */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            cursor: pointer;
+            color: var(--text-primary);
+            padding: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .mobile-menu-content {
+            background: var(--darker-bg);
+            width: clamp(280px, 80vw, 320px);
+            height: 100vh;
+            padding: 2rem;
+            transform: translateX(-100%);
+            transition: var(--transition);
+            overflow-y: auto;
+            max-width: 100vw;
+        }
+
+        .mobile-menu.active .mobile-menu-content {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .mobile-menu-header .logo {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+        }
+
+        .mobile-close {
+            background: none;
+            border: none;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .mobile-nav-list {
+            list-style: none;
+            width: 100%;
+        }
+
+        .mobile-nav-item {
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }
+
+        .mobile-nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            display: block;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-dark);
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .mobile-nav-link:hover {
+            color: var(--primary-gold);
+            padding-left: 1rem;
+        }
+
+        /* Mobile Categories - Updated to match desktop structure */
+        .mobile-categories {
+            margin-top: 1rem;
+        }
+
+        .mobile-categories-item .mobile-nav-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-dropdown-icon {
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .mobile-categories-item.active .mobile-dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .mobile-categories-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: var(--surface-dark);
+            border-radius: var(--radius);
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .mobile-categories-item.active .mobile-categories-content {
+            max-height: 1000px;
+            padding: 1rem;
+        }
+
+        .mobile-category-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .mobile-category-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .mobile-category-section h4 {
+            color: var(--primary-gold);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .mobile-category-section ul {
+            list-style: none;
+        }
+
+        .mobile-category-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .mobile-category-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            transition: var(--transition);
+            display: block;
+            padding: 0.25rem 0;
+        }
+
+        .mobile-category-section a:hover {
+            color: var(--primary-gold);
+            padding-left: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 50%, var(--dark-bg) 100%);
+            position: relative;
+            overflow: hidden;
+            color: var(--text-primary);
+            padding: clamp(2rem, 6vw, 4rem) 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(240, 185, 11, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(247, 147, 26, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(1rem, 3vw, 1.5rem);
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--primary-gold), var(--bitcoin-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            word-wrap: break-word;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            background: linear-gradient(135deg, var(--primary-gold), var(--bitcoin-orange));
+            color: var(--dark-bg);
+            padding: clamp(0.9rem, 2.5vw, 1.2rem) clamp(1.8rem, 4vw, 2.5rem);
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            display: inline-block;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-gold);
+        }
+
+        /* Main Content Layout */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 1.5rem);
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: clamp(2rem, 4vw, 4rem);
+            width: 100%;
+        }
+
+        /* Blog Posts */
+        .blog-posts {
+            display: grid;
+            gap: clamp(2rem, 4vw, 3rem);
+            width: 100%;
+            min-width: 0; /* Prevent overflow */
+        }
+
+        .featured-post {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .featured-post:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-gold);
+        }
+
+        .featured-image {
+            width: 100%;
+            height: clamp(200px, 25vw, 350px);
+            background: linear-gradient(135deg, var(--primary-gold), var(--bitcoin-orange));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-bg);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            position: relative;
+            font-weight: 800;
+        }
+
+        .featured-content {
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            width: 100%;
+        }
+
+        /* Enhanced Post Meta - More Attractive */
+        .post-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: clamp(0.75rem, 2vw, 1rem);
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(240, 185, 11, 0.05);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary-gold);
+            font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+            font-weight: 500;
+        }
+
+        .post-category {
+            background: linear-gradient(135deg, var(--primary-gold), var(--bitcoin-orange));
+            color: var(--dark-bg);
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-size: clamp(0.7rem, 1.6vw, 0.75rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: var(--shadow-sm);
+            white-space: nowrap;
+        }
+
+        .post-meta span:not(.post-category) {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .post-meta span:not(.post-category):before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .post-meta span:first-child:before {
+            display: none;
+        }
+
+        .post-title {
+            font-size: clamp(1.3rem, 3.5vw, 2.2rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            word-wrap: break-word;
+        }
+
+        .post-title a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .post-title a:hover {
+            color: var(--primary-gold);
+        }
+
+        .post-excerpt {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            font-weight: 400;
+        }
+
+        .read-more {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+        }
+
+        .read-more:hover {
+            gap: 1rem;
+            text-shadow: var(--glow-gold);
+        }
+
+        /* Regular Posts Grid */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 35vw, 350px), 1fr));
+            gap: clamp(1.5rem, 3vw, 2.5rem);
+            margin-top: clamp(2rem, 4vw, 4rem);
+            width: 100%;
+        }
+
+        .post-card {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            width: 100%;
+        }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-gold);
+        }
+
+        .post-image {
+            width: 100%;
+            height: clamp(160px, 20vw, 220px);
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+        }
+
+        .post-content {
+            padding: clamp(1.5rem, 2.5vw, 2rem);
+            width: 100%;
+        }
+
+        .post-content .post-title {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .post-content .post-excerpt {
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(1.5rem, 3vw, 2.5rem);
+            width: 100%;
+            min-width: 0;
+        }
+
+        .sidebar-widget {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-lg);
+            padding: clamp(1.5rem, 2.5vw, 2rem);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .sidebar-widget:hover {
+            border-color: var(--primary-gold);
+        }
+
+        .widget-title {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Newsletter Widget */
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .newsletter-input {
+            padding: 1rem;
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius);
+            font-family: var(--font-primary);
+            background: var(--surface-dark);
+            color: var(--text-primary);
+            transition: var(--transition);
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+            width: 100%;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 3px rgba(240, 185, 11, 0.2);
+        }
+
+        .newsletter-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .newsletter-btn {
+            background: linear-gradient(135deg, var(--primary-gold), var(--bitcoin-orange));
+            color: var(--dark-bg);
+            border: none;
+            padding: 1rem;
+            border-radius: var(--radius);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+            width: 100%;
+        }
+
+        .newsletter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-gold);
+        }
+
+        .newsletter-description {
+            font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Trending Topics */
+        .trending-list {
+            list-style: none;
+            width: 100%;
+        }
+
+        .trending-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border-dark);
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .trending-item:last-child {
+            border-bottom: none;
+        }
+
+        .trending-item:hover {
+            background: var(--surface-dark);
+            margin: 0 -2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            border-radius: var(--radius);
+        }
+
+        .trending-number {
+            background: linear-gradient(135deg, var(--primary-gold), var(--bitcoin-orange));
+            color: var(--dark-bg);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(0.7rem, 1.6vw, 0.8rem);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .trending-content {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .trending-content h4 {
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .trending-content h4 a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .trending-content h4 a:hover {
+            color: var(--primary-gold);
+        }
+
+        .trending-meta {
+            font-size: clamp(0.7rem, 1.6vw, 0.8rem);
+            color: var(--text-muted);
+        }
+
+        /* Categories Widget */
+        .categories-list {
+            list-style: none;
+            width: 100%;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-dark);
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .category-item:hover {
+            background: var(--surface-dark);
+            margin: 0 -2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            border-radius: var(--radius);
+        }
+
+        .category-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+            flex: 1;
+        }
+
+        .category-link:hover {
+            color: var(--primary-gold);
+        }
+
+        .category-count {
+            background: var(--surface-dark);
+            color: var(--text-muted);
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: clamp(0.7rem, 1.6vw, 0.8rem);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Social Widget */
+        .social-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem;
+            background: var(--surface-dark);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid var(--border-dark);
+            font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+            text-align: center;
+            justify-content: center;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-gold);
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-dark);
+            padding: clamp(3rem, 5vw, 4rem) 0 2rem;
+            margin-top: clamp(3rem, 5vw, 5rem);
+            width: 100%;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(1rem, 3vw, 1.5rem);
+            width: 100%;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: clamp(2rem, 3vw, 3rem);
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .footer-logo span {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 800;
+            color: var(--primary-gold);
+        }
+
+        .footer-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-social-link:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            transform: translateY(-2px);
+        }
+
+        .footer-section h4 {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+        }
+
+        .footer-links {
+            list-style: none;
+            width: 100%;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 400;
+            transition: var(--transition);
+            font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-gold);
+            padding-left: 0.5rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-dark);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-legal a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-legal a:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Single Blog Page Styles */
+        .single-blog-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: clamp(1.5rem, 3vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: clamp(2rem, 4vw, 4rem);
+            width: 100%;
+        }
+
+        .blog-article {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-lg);
+            padding: clamp(2rem, 4vw, 3rem);
+            box-shadow: var(--shadow);
+            width: 100%;
+            min-width: 0;
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-dark);
+            padding-bottom: 2rem;
+            width: 100%;
+        }
+
+        .article-title {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            word-wrap: break-word;
+        }
+
+        /* Enhanced Article Meta - More Attractive */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: clamp(1rem, 2vw, 1.5rem);
+            background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(247, 147, 26, 0.1));
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(240, 185, 11, 0.2);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+            box-shadow: var(--shadow-sm);
+            margin: 2rem 0;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            color: var(--text-primary);
+        }
+
+        .article-meta span:before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 6px rgba(240, 185, 11, 0.5);
+        }
+
+        .article-meta span:first-child:before {
+            display: none;
+        }
+
+        .article-meta strong {
+            color: var(--primary-gold);
+        }
+
+        .article-content {
+            font-size: clamp(0.95rem, 2vw, 1.15rem);
+            line-height: 1.9;
+            color: var(--text-primary);
+            width: 100%;
+        }
+
+        .article-content h2 {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 700;
+            margin: 3rem 0 1.5rem;
+            color: var(--primary-gold);
+        }
+
+        .article-content h3 {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-content p {
+            margin-bottom: 1.8rem;
+            font-weight: 400;
+            word-wrap: break-word;
+        }
+
+        .article-content p:first-of-type {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+
+        .article-content blockquote {
+            background: var(--surface-dark);
+            border-left: 4px solid var(--primary-gold);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-style: italic;
+        }
+
+        .article-content code {
+            background: var(--surface-dark);
+            color: var(--primary-gold);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+        }
+
+        .article-content ul {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+
+        .article-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-dark);
+            width: 100%;
+        }
+
+        .article-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .btn-back {
+            background: var(--surface-dark);
+            color: var(--text-primary);
+            border: 1px solid var(--border-dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        }
+
+        .btn-back:hover {
+            border-color: var(--primary-gold);
+            color: var(--primary-gold);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--surface-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+            white-space: nowrap;
+        }
+
+        .share-btn:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            transform: translateY(-2px);
+        }
+
+        /* Nest Hub Specific Optimizations */
+        @media screen and (min-width: 1024px) and (max-width: 1024px) and (min-height: 600px) and (max-height: 600px) {
+            /* Google Nest Hub specific styles */
+            .header {
+                padding: 0.75rem 0;
+            }
+            
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .main-container {
+                padding: 2rem 1rem;
+                gap: 2rem;
+            }
+            
+            .featured-image {
+                height: 200px;
+            }
+            
+            .post-title {
+                font-size: 1.5rem;
+            }
+            
+            .sidebar-widget {
+                padding: 1.5rem;
+            }
+            
+            .footer {
+                padding: 2rem 0 1rem;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container,
+            .single-blog-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .search-input {
+                width: 200px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .footer-brand {
+                grid-column: 1 / -1;
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            .main-container,
+            .single-blog-container {
+                padding: 1.5rem 1rem;
+                gap: 2rem;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .social-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .mega-menu {
+                display: none !important;
+            }
+
+            .footer-legal {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .article-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .share-buttons {
+                justify-content: center;
+            }
+
+            .trending-item:hover {
+                margin: 0 -1.5rem;
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .category-item:hover {
+                margin: 0 -1.5rem;
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            /* Enhanced mobile post-meta */
+            .post-meta {
+                padding: 0.75rem;
+                gap: 0.5rem;
+                font-size: 0.75rem;
+            }
+
+            .post-category {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.65rem;
+            }
+
+            .article-meta {
+                padding: 1rem;
+                gap: 0.75rem;
+                font-size: 0.8rem;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .article-meta span {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+            
+            .hero-container {
+                padding: 0 1rem;
+            }
+            
+            .main-container,
+            .single-blog-container {
+                padding: 1rem;
+            }
+            
+            .sidebar-widget {
+                padding: 1rem;
+            }
+            
+            .featured-content,
+            .blog-article {
+                padding: 1rem;
+            }
+            
+            .post-content {
+                padding: 1rem;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+
+            .share-btn {
+                justify-content: center;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .logo-icon {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .loading.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--bitcoin-orange));
+            z-index: 9999;
+            transition: width 0.1s ease;
+            box-shadow: var(--glow-gold);
+        }
+
+        /* Page indicator for single blog */
+        .page-indicator {
+            display: none;
+        }
+
+        .single-page .page-indicator {
+            display: block;
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            background: var(--darker-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            margin: 0.5rem 0;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .indicator-dot.active {
+            background: var(--primary-gold);
+            box-shadow: var(--glow-gold);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--bitcoin-orange);
+        }
+
+        /* Additional Mobile Optimizations */
+        @media (max-width: 768px) {
+            * {
+                max-width: 100%;
+            }
+            
+            .mobile-menu-content {
+                max-width: calc(100vw - 2rem);
+            }
+        }
+
+        /* Prevent any element from causing horizontal scroll */
+        .header-container,
+        .hero-container,
+        .main-container,
+        .single-blog-container,
+        .footer-container,
+        .blog-posts,
+        .sidebar,
+        .featured-post,
+        .post-card,
+        .sidebar-widget {
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        /* Fix any potential overflow issues */
+        img,
+        video,
+        iframe {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Page Indicator for Single Blog -->
+    <div class="page-indicator" id="pageIndicator">
+        <div class="indicator-dot" data-section="header"></div>
+        <div class="indicator-dot" data-section="content"></div>
+        <div class="indicator-dot" data-section="footer"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="https://blockchainlatestnews.com" class="logo" onclick="showHomePage()">
+                <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="#F0B90B" stroke="#ffffff" stroke-width="3"/>
+                    <path d="M35 50l10 10 20-20" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="50" cy="30" r="8" fill="#ffffff"/>
+                    <circle cx="30" cy="65" r="6" fill="#ffffff"/>
+                    <circle cx="70" cy="65" r="6" fill="#ffffff"/>
+                </svg>
+                BlockchainLatestNews
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="nav-desktop">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="https://blockchainlatestnews.com" class="nav-link" onclick="showHomePage()">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            Categories 
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z"/>
+                            </svg>
+                        </a>
+                        <div class="mega-menu">
+                            <div class="mega-menu-grid">
+                                <div class="mega-menu-section">
+                                    <h4>🪙 Blockchain</h4>
+                                    <ul>
+                                        <li><a href="#">Bitcoin (BTC)</a></li>
+                                        <li><a href="#">Ethereum (ETH)</a></li>
+                                        <li><a href="#">DeFi Protocols</a></li>
+                                        <li><a href="#">NFT Marketplace</a></li>
+                                        <li><a href="#">Smart Contracts</a></li>
+                                        <li><a href="#">Layer 2 Solutions</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mega-menu-section">
+                                    <h4>📈 Trading</h4>
+                                    <ul>
+                                        <li><a href="#">Market Analysis</a></li>
+                                        <li><a href="#">Technical Analysis</a></li>
+                                        <li><a href="#">Trading Strategies</a></li>
+                                        <li><a href="#">Altcoin Reviews</a></li>
+                                        <li><a href="#">Exchange Guides</a></li>
+                                        <li><a href="#">Portfolio Management</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mega-menu-section">
+                                    <h4>⚡ Technology</h4>
+                                    <ul>
+                                        <li><a href="#">Web3 Development</a></li>
+                                        <li><a href="#">Metaverse Projects</a></li>
+                                        <li><a href="#">AI & Crypto</a></li>
+                                        <li><a href="#">Security & Privacy</a></li>
+                                        <li><a href="#">Regulations</a></li>
+                                        <li><a href="#">Mining & Staking</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Market</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Learn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">About</a>
+                    </li>
+                </ul>
+
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search blockchain news...">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                </div>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <div class="logo">BlockchainLatestNews</div>
+                <button class="mobile-close" onclick="toggleMobileMenu()">×</button>
+            </div>
+            <ul class="mobile-nav-list">
+                <li class="mobile-nav-item">
+                    <a href="https://blockchainlatestnews.com" class="mobile-nav-link" onclick="showHomePage(); toggleMobileMenu()">Home</a>
+                </li>
+                <li class="mobile-nav-item mobile-categories-item" id="mobileCategoriesItem">
+                    <a href="#" class="mobile-nav-link" onclick="toggleMobileCategories(event)">
+                        Categories 
+                        <span class="mobile-dropdown-icon">▼</span>
+                    </a>
+                    <div class="mobile-categories-content" id="mobileCategories">
+                        <div class="mobile-category-section">
+                            <h4>🪙 Blockchain</h4>
+                            <ul>
+                                <li><a href="#" onclick="toggleMobileMenu()">Bitcoin (BTC)</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Ethereum (ETH)</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">DeFi Protocols</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">NFT Marketplace</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Smart Contracts</a></li>
+                            </ul>
+                        </div>
+                        <div class="mobile-category-section">
+                            <h4>📈 Trading</h4>
+                            <ul>
+                                <li><a href="#" onclick="toggleMobileMenu()">Market Analysis</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Technical Analysis</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Trading Strategies</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Altcoin Reviews</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Exchange Guides</a></li>
+                            </ul>
+                        </div>
+                        <div class="mobile-category-section">
+                            <h4>⚡ Technology</h4>
+                            <ul>
+                                <li><a href="#" onclick="toggleMobileMenu()">Web3 Development</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Metaverse Projects</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">AI & Crypto</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Security & Privacy</a></li>
+                                <li><a href="#" onclick="toggleMobileMenu()">Regulations</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="mobile-nav-item">
+                    <a href="#" class="mobile-nav-link" onclick="toggleMobileMenu()">Market</a>
+                </li>
+                <li class="mobile-nav-item">
+                    <a href="#" class="mobile-nav-link" onclick="toggleMobileMenu()">Learn</a>
+                </li>
+                <li class="mobile-nav-item">
+                    <a href="#" class="mobile-nav-link" onclick="toggleMobileMenu()">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Home Page Content -->
+    <div id="homePage">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <h1 class="hero-title">Blockchain Latest News</h1>
+                <p class="hero-subtitle">Your trusted source for breaking blockchain news, cryptocurrency insights, and market analysis. Stay informed with the latest developments in the digital asset ecosystem.</p>
+                <button class="hero-cta" onclick="document.querySelector('.main-container').scrollIntoView({behavior: 'smooth'})">
+                    Explore Latest News
+                </button>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="main-container">
+            <!-- Blog Posts -->
+            <main class="blog-posts">
+                <!-- Featured Post -->
+                <article class="featured-post loading">
+                    <div class="featured-image">₿</div>
+                    <div class="featured-content">
+                        <div class="post-meta">
+                            <span class="post-category">🏆 Featured</span>
+                            <span>🗓️ July 30, 2025</span>
+                            <span>⏱️ 8 min read</span>
+                            <span>✍️ Editorial Team</span>
+                        </div>
+                        <h2 class="post-title">
+                            <a href="#" onclick="showSingleBlog()">European Union Finalizes Comprehensive MiCA Implementation Guidelines</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            ESMA releases detailed compliance framework for crypto asset service providers across all 27 member states, setting clear deadlines and operational requirements for the cryptocurrency industry's future in Europe. This groundbreaking regulation will reshape how digital assets operate globally.
+                        </p>
+                        <a href="#" class="read-more" onclick="showSingleBlog()">
+                            Read Full Analysis 
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Posts Grid -->
+                <div class="posts-grid">
+                    <article class="post-card loading">
+                        <div class="post-image">⚡</div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-category">⚡ Layer 2</span>
+                                <span>🗓️ July 29, 2025</span>
+                                <span>⏱️ 6 min read</span>
+                            </div>
+                            <h3 class="post-title">
+                                <a href="#" onclick="showSingleBlog()">Ethereum Layer 2 Solutions Drive Unprecedented Growth</a>
+                            </h3>
+                            <p class="post-excerpt">
+                                Arbitrum and Optimism lead the charge in scaling Ethereum with remarkable adoption rates and institutional backing...
+                            </p>
+                            <a href="#" class="read-more" onclick="showSingleBlog()">Read More →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card loading">
+                        <div class="post-image">🏦</div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-category">🏦 Banking</span>
+                                <span>🗓️ July 28, 2025</span>
+                                <span>⏱️ 7 min read</span>
+                            </div>
+                            <h3 class="post-title">
+                                <a href="#" onclick="showSingleBlog()">JPMorgan's Blockchain Revolution Reaches 450+ Institutions</a>
+                            </h3>
+                            <p class="post-excerpt">
+                                The banking giant's JPM Coin infrastructure achieves major milestone in institutional adoption across global markets...
+                            </p>
+                            <a href="#" class="read-more" onclick="showSingleBlog()">Read More →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card loading">
+                        <div class="post-image">🔒</div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-category">🔒 Privacy</span>
+                                <span>🗓️ July 27, 2025</span>
+                                <span>⏱️ 9 min read</span>
+                            </div>
+                            <h3 class="post-title">
+                                <a href="#" onclick="showSingleBlog()">Zero-Knowledge Proofs Transform Enterprise Blockchain</a>
+                            </h3>
+                            <p class="post-excerpt">
+                                Major corporations implement zk-SNARK technology for confidential blockchain solutions and data privacy...
+                            </p>
+                            <a href="#" class="read-more" onclick="showSingleBlog()">Read More →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card loading">
+                        <div class="post-image">🌐</div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-category">🌐 Web3</span>
+                                <span>🗓️ July 26, 2025</span>
+                                <span>⏱️ 5 min read</span>
+                            </div>
+                            <h3 class="post-title">
+                                <a href="#" onclick="showSingleBlog()">Decentralized Internet Infrastructure Gains Momentum</a>
+                            </h3>
+                            <p class="post-excerpt">
+                                Web3 protocols showcase real-world applications beyond cryptocurrency trading and speculation...
+                            </p>
+                            <a href="#" class="read-more" onclick="showSingleBlog()">Read More →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card loading">
+                        <div class="post-image">🤖</div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-category">🤖 AI</span>
+                                <span>🗓️ July 25, 2025</span>
+                                <span>⏱️ 10 min read</span>
+                            </div>
+                            <h3 class="post-title">
+                                <a href="#" onclick="showSingleBlog()">AI-Powered Trading Algorithms Reshape Crypto Markets</a>
+                            </h3>
+                            <p class="post-excerpt">
+                                Machine learning models demonstrate superior performance in cryptocurrency prediction and portfolio optimization...
+                            </p>
+                            <a href="#" class="read-more" onclick="showSingleBlog()">Read More →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card loading">
+                        <div class="post-image">💎</div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-category">💎 NFTs</span>
+                                <span>🗓️ July 24, 2025</span>
+                                <span>⏱️ 8 min read</span>
+                            </div>
+                            <h3 class="post-title">
+                                <a href="#" onclick="showSingleBlog()">NFT Utility Expands Beyond Digital Art Collections</a>
+                            </h3>
+                            <p class="post-excerpt">
+                                Non-fungible tokens find practical applications in gaming, identity verification, and licensing systems...
+                            </p>
+                            <a href="#" class="read-more" onclick="showSingleBlog()">Read More →</a>
+                        </div>
+                    </article>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Newsletter Widget -->
+                <div class="sidebar-widget loading">
+                    <h3 class="widget-title">
+                        📧 Blockchain Newsletter
+                    </h3>
+                    <p class="newsletter-description">
+                        Get exclusive blockchain insights, cryptocurrency updates, and breaking news delivered to your inbox. Join 100,000+ crypto enthusiasts worldwide.
+                    </p>
+                    <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                        <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+                        <button type="submit" class="newsletter-btn">Subscribe to Updates</button>
+                    </form>
+                </div>
+
+                <!-- Trending Topics -->
+                <div class="sidebar-widget loading">
+                    <h3 class="widget-title">
+                        🔥 Trending Now
+                    </h3>
+                    <ul class="trending-list">
+                        <li class="trending-item">
+                            <span class="trending-number">1</span>
+                            <div class="trending-content">
+                                <h4><a href="#" onclick="showSingleBlog()">Bitcoin ETF Approval Sparks $2B Institutional Inflow</a></h4>
+                                <p class="trending-meta">25,843 views • 1 hour ago</p>
+                            </div>
+                        </li>
+                        <li class="trending-item">
+                            <span class="trending-number">2</span>
+                            <div class="trending-content">
+                                <h4><a href="#" onclick="showSingleBlog()">Solana Network Achieves 5,000 TPS Record</a></h4>
+                                <p class="trending-meta">18,921 views • 3 hours ago</p>
+                            </div>
+                        </li>
+                        <li class="trending-item">
+                            <span class="trending-number">3</span>
+                            <div class="trending-content">
+                                <h4><a href="#" onclick="showSingleBlog()">Central Bank Digital Currencies Launch in 12 Countries</a></h4>
+                                <p class="trending-meta">15,654 views • 5 hours ago</p>
+                            </div>
+                        </li>
+                        <li class="trending-item">
+                            <span class="trending-number">4</span>
+                            <div class="trending-content">
+                                <h4><a href="#" onclick="showSingleBlog()">DeFi Protocol TVL Reaches New All-Time High</a></h4>
+                                <p class="trending-meta">12,432 views • 8 hours ago</p>
+                            </div>
+                        </li>
+                        <li class="trending-item">
+                            <span class="trending-number">5</span>
+                            <div class="trending-content">
+                                <h4><a href="#" onclick="showSingleBlog()">GameFi Revenue Surpasses Traditional Gaming</a></h4>
+                                <p class="trending-meta">11,876 views • 12 hours ago</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Categories Widget -->
+                <div class="sidebar-widget loading">
+                    <h3 class="widget-title">
+                        📂 Popular Categories
+                    </h3>
+                    <ul class="categories-list">
+                        <li class="category-item">
+                            <a href="#" class="category-link">Blockchain Technology</a>
+                            <span class="category-count">156</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">Market Analysis</a>
+                            <span class="category-count">143</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">DeFi & DEX</a>
+                            <span class="category-count">98</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">NFTs & Gaming</a>
+                            <span class="category-count">87</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">Regulations</a>
+                            <span class="category-count">76</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">Web3 & Metaverse</a>
+                            <span class="category-count">65</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">AI & Machine Learning</a>
+                            <span class="category-count">54</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">Mining & Staking</a>
+                            <span class="category-count">43</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Media Widget -->
+                <div class="sidebar-widget loading">
+                    <h3 class="widget-title">
+                        🌐 Join Community
+                    </h3>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                            Twitter
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                            LinkedIn
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                            </svg>
+                            Discord
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                            YouTube
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Single Blog Page Content -->
+    <div id="singleBlogPage" style="display: none;">
+        <div class="single-blog-container">
+            <!-- Blog Article -->
+            <article class="blog-article">
+                <header class="article-header">
+                    <div class="post-meta">
+                        <span class="post-category">🏆 Featured Analysis</span>
+                        <span>🗓️ July 30, 2025</span>
+                        <span>⏱️ 8 min read</span>
+                        <span>✍️ Editorial Team</span>
+                    </div>
+                    <h1 class="article-title">European Union Finalizes Comprehensive MiCA Implementation Guidelines</h1>
+                    <div class="article-meta">
+                        <span>📝 Published by <strong>BlockchainLatestNews Editorial Team</strong></span>
+                        <span>🔄 Last updated: <strong>July 30, 2025</strong></span>
+                    </div>
+                </header>
+                
+                <div class="article-content">
+                    <p><strong>The European Securities and Markets Authority (ESMA) has released the most comprehensive regulatory framework for crypto asset service providers, setting the stage for a new era of digital asset compliance across all 27 European Union member states.</strong></p>
+
+                    <p>The Markets in Crypto-Assets (MiCA) regulation represents a watershed moment for the cryptocurrency industry, establishing clear operational requirements, consumer protection measures, and institutional oversight mechanisms that will fundamentally reshape how digital assets operate within European markets.</p>
+
+                    <h2>Key Implementation Guidelines</h2>
+
+                    <p>The newly released framework addresses critical areas that have long been sources of uncertainty for crypto businesses operating in Europe:</p>
+
+                    <blockquote>
+                        "This regulation ensures that crypto-asset activities in the EU are conducted in a safe, transparent, and sustainable manner while fostering innovation and competitiveness." - ESMA Chairman
+                    </blockquote>
+
+                    <h3>Licensing and Authorization Requirements</h3>
+
+                    <p>Crypto asset service providers (CASPs) must now obtain specific licenses for different types of activities, including:</p>
+
+                    <ul>
+                        <li><strong>Custody and administration</strong> of crypto assets on behalf of clients</li>
+                        <li><strong>Operation of trading platforms</strong> for crypto assets</li>
+                        <li><strong>Exchange services</strong> between crypto assets and fiat currencies</li>
+                        <li><strong>Execution of orders</strong> for crypto assets on behalf of clients</li>
+                        <li><strong>Portfolio management</strong> of crypto assets</li>
+                        <li><strong>Reception and transmission</strong> of orders for crypto assets</li>
+                    </ul>
+
+                    <h3>Consumer Protection Measures</h3>
+
+                    <p>The regulation introduces stringent consumer protection requirements that mandate clear disclosure of risks, transparent fee structures, and robust complaint handling procedures. These measures are designed to protect retail investors while maintaining market integrity.</p>
+
+                    <h2>Timeline and Compliance Deadlines</h2>
+
+                    <p>The implementation follows a phased approach with specific deadlines for different market participants:</p>
+
+                    <p><strong>Phase 1 (December 2024):</strong> Stablecoin issuers must comply with new reserve requirements and transparency obligations.</p>
+
+                    <p><strong>Phase 2 (June 2025):</strong> All crypto asset service providers must obtain appropriate licenses and implement operational requirements.</p>
+
+                    <p><strong>Phase 3 (December 2025):</strong> Full implementation across all EU member states with harmonized supervision mechanisms.</p>
+
+                    <h2>Market Impact and Industry Response</h2>
+
+                    <p>The crypto industry has responded positively to the clarity provided by MiCA, with many leading exchanges and service providers already beginning their compliance preparations. This regulatory certainty is expected to accelerate institutional adoption and cross-border crypto asset services within the EU.</p>
+
+                    <h3>Institutional Adoption Acceleration</h3>
+
+                    <p>Traditional financial institutions have expressed renewed interest in offering crypto-related services following the regulatory clarity. Major European banks are now actively exploring custody solutions and trading platforms for digital assets.</p>
+
+                    <p>The regulation also addresses environmental concerns by requiring crypto asset service providers to disclose the environmental impact of their consensus mechanisms, particularly for proof-of-work cryptocurrencies.</p>
+
+                    <h2>Global Implications</h2>
+
+                    <p>MiCA's comprehensive approach is being closely watched by regulators worldwide, with several jurisdictions considering similar frameworks. The EU's pioneering regulatory stance could establish global standards for crypto asset regulation.</p>
+
+                    <p>As the crypto industry continues to mature, the successful implementation of MiCA will serve as a crucial test case for balancing innovation with investor protection and market stability.</p>
+                </div>
+
+                <footer class="article-footer">
+                    <div class="article-actions">
+                        <a href="#" class="btn-back" onclick="showHomePage()">← Back to News</a>
+                        <div class="share-buttons">
+                            <a href="#" class="share-btn" onclick="shareArticle('twitter')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                </svg>
+                                Tweet
+                            </a>
+                            <a href="#" class="share-btn" onclick="shareArticle('linkedin')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                                Share
+                            </a>
+                            <a href="#" class="share-btn" onclick="shareArticle('copy')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                                Copy
+                            </a>
+                        </div>
+                    </div>
+                </footer>
+            </article>
+
+            <!-- Same Sidebar as Homepage -->
+            <aside class="sidebar">
+                <!-- Newsletter Widget -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">
+                        📧 Blockchain Newsletter
+                    </h3>
+                    <p class="newsletter-description">
+                        Get exclusive blockchain insights, cryptocurrency updates, and breaking news delivered to your inbox. Join 100,000+ crypto enthusiasts worldwide.
+                    </p>
+                    <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                        <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+                        <button type="submit" class="newsletter-btn">Subscribe to Updates</button>
+                    </form>
+                </div>
+
+                <!-- Related Articles -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">
+                        📖 Related Articles
+                    </h3>
+                    <ul class="trending-list">
+                        <li class="trending-item">
+                            <div class="trending-content">
+                                <h4><a href="#" onclick="showSingleBlog()">Understanding MiCA: A Complete Guide for Crypto Businesses</a></h4>
+                                <p class="trending-meta">15 min read • Regulation</p>
+                            </div>
+                        </li>
+                        <li class="trending-item">
+                            <div class="trending-content">
+                                <h4><a href="#" onclick="showSingleBlog()">How EU Crypto Regulations Affect Global Markets</a></h4>
+                                <p class="trending-meta">12 min read • Market Analysis</p>
+                            </div>
+                        </li>
+                        <li class="trending-item">
+                            <div class="trending-content">
+                                <h4><a href="#" onclick="showSingleBlog()">Compliance Checklist for Crypto Service Providers</a></h4>
+                                <p class="trending-meta">8 min read • Business</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Categories Widget (Same as homepage) -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">
+                        📂 Popular Categories
+                    </h3>
+                    <ul class="categories-list">
+                        <li class="category-item">
+                            <a href="#" class="category-link">Blockchain Technology</a>
+                            <span class="category-count">156</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">Market Analysis</a>
+                            <span class="category-count">143</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">DeFi & DEX</a>
+                            <span class="category-count">98</span>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">NFTs & Gaming</a>
+                            <span class="category-count">87</span>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="#F0B90B" stroke="#ffffff" stroke-width="3"/>
+                            <path d="M35 50l10 10 20-20" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="50" cy="30" r="8" fill="#ffffff"/>
+                            <circle cx="30" cy="65" r="6" fill="#ffffff"/>
+                            <circle cx="70" cy="65" r="6" fill="#ffffff"/>
+                        </svg>
+                        <span>BlockchainLatestNews</span>
+                    </div>
+                    <p class="footer-description">
+                        Your trusted source for cryptocurrency news, blockchain insights, and market analysis. Empowering the next generation of digital asset investors with reliable information and expert perspectives.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="footer-social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/blockchainlatestnews" class="footer-social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="footer-social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.youtube.com/@blockchainlatestnews" class="footer-social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </a>
+                        <a href="mailto:contact@blockchainlatestnews.com" class="footer-social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Latest News</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://blockchainlatestnews.com/category/bitcoin">Bitcoin News</a></li>
+                        <li><a href="https://blockchainlatestnews.com/category/ethereum">Ethereum Updates</a></li>
+                        <li><a href="https://blockchainlatestnews.com/category/defi">DeFi Reports</a></li>
+                        <li><a href="https://blockchainlatestnews.com/category/nft">NFT Insights</a></li>
+                        <li><a href="https://blockchainlatestnews.com/category/altcoins">Altcoin Analysis</a></li>
+                        <li><a href="https://blockchainlatestnews.com/market-analysis">Market Predictions</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://blockchainlatestnews.com/crypto-calculator">Crypto Calculator</a></li>
+                        <li><a href="https://blockchainlatestnews.com/portfolio-tracker">Portfolio Tracker</a></li>
+                        <li><a href="https://blockchainlatestnews.com/learn">Learning Center</a></li>
+                        <li><a href="https://blockchainlatestnews.com/glossary">Crypto Glossary</a></li>
+                        <li><a href="https://blockchainlatestnews.com/api">API Documentation</a></li>
+                        <li><a href="https://blockchainlatestnews.com/whitepapers">White Papers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>About</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://blockchainlatestnews.com/about">About Us</a></li>
+                        <li><a href="https://blockchainlatestnews.com/team">Our Team</a></li>
+                        <li><a href="https://blockchainlatestnews.com/careers">Careers</a></li>
+                        <li><a href="https://blockchainlatestnews.com/press">Press Kit</a></li>
+                        <li><a href="https://blockchainlatestnews.com/contact">Contact</a></li>
+                        <li><a href="https://blockchainlatestnews.com/partnerships">Partnership</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://blockchainlatestnews.com/help">Help Center</a></li>
+                        <li><a href="https://blockchainlatestnews.com/submit-news">Submit News</a></li>
+                        <li><a href="https://blockchainlatestnews.com/report-issue">Report Issue</a></li>
+                        <li><a href="https://blockchainlatestnews.com/community">Community Forum</a></li>
+                        <li><a href="https://blockchainlatestnews.com/advertise">Advertise</a></li>
+                        <li><a href="https://blockchainlatestnews.com/media-kit">Media Kit</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 BlockchainLatestNews.com. All rights reserved. Your trusted source for blockchain intelligence.</p>
+                <div class="footer-legal">
+                    <a href="https://blockchainlatestnews.com/privacy">Privacy Policy</a>
+                    <a href="https://blockchainlatestnews.com/terms">Terms of Service</a>
+                    <a href="https://blockchainlatestnews.com/cookies">Cookie Policy</a>
+                    <a href="https://blockchainlatestnews.com/disclaimer">Disclaimer</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu.style.display === 'block') {
+                mobileMenu.classList.remove('active');
+                setTimeout(() => {
+                    mobileMenu.style.display = 'none';
+                }, 300);
+            } else {
+                mobileMenu.style.display = 'block';
+                setTimeout(() => {
+                    mobileMenu.classList.add('active');
+                }, 10);
+            }
+        }
+
+        // Mobile Categories Toggle - Updated
+        function toggleMobileCategories(event) {
+            event.preventDefault();
+            const categoriesItem = document.getElementById('mobileCategoriesItem');
+            const categoriesContent = document.getElementById('mobileCategories');
+            
+            categoriesItem.classList.toggle('active');
+        }
+
+        // Page Navigation
+        function showHomePage() {
+            document.getElementById('homePage').style.display = 'block';
+            document.getElementById('singleBlogPage').style.display = 'none';
+            document.body.classList.remove('single-page');
+            window.scrollTo(0, 0);
+        }
+
+        function showSingleBlog() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('singleBlogPage').style.display = 'block';
+            document.body.classList.add('single-page');
+            window.scrollTo(0, 0);
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!mobileMenu.contains(event.target) && !mobileBtn.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+                setTimeout(() => {
+                    mobileMenu.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // Newsletter Subscription
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const input = event.target.querySelector('input[type="email"]');
+            const email = input.value.trim();
+            
+            if (!email) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            const btn = event.target.querySelector('.newsletter-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Subscribing...';
+            btn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                btn.textContent = '✓ Subscribed!';
+                btn.style.backgroundColor = 'var(--success)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = '';
+                    btn.disabled = false;
+                    input.value = '';
+                    alert('🎉 Thank you for subscribing to BlockchainLatestNews!');
+                }, 2000);
+            }, 1500);
+        }
+
+        // Social Sharing Functions
+        function shareArticle(platform) {
+            const url = 'https://blockchainlatestnews.com/';
+            const title = document.querySelector('.article-title') ? 
+                         document.querySelector('.article-title').textContent : 
+                         'BlockchainLatestNews - Latest Crypto & Blockchain News';
+            
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}&hashtags=blockchain,crypto,bitcoin,ethereum&via=BlockchainNews`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+                    break;
+                case 'copy':
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert('✓ Article link copied to clipboard!');
+                    }).catch(() => {
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = url;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        alert('✓ Article link copied to clipboard!');
+                    });
+                    return;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
+            }
+        }
+
+        // Scroll Progress Bar
+        window.addEventListener('scroll', function() {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Enhanced Search Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', debounce(function(e) {
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    if (searchTerm.length > 2) {
+                        console.log('🔍 Searching BlockchainLatestNews for:', searchTerm);
+                    }
+                }, 300));
+            }
+        });
+
+        // Loading Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const loadingElements = document.querySelectorAll('.loading');
+                loadingElements.forEach((element, index) => {
+                    setTimeout(() => {
+                        element.classList.add('loaded');
+                    }, index * 150);
+                });
+            }, 500);
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            document.querySelectorAll('.post-content, .featured-content').forEach(post => {
+                const text = post.textContent || post.innerText;
+                const wordsPerMinute = 200;
+                const wordCount = text.trim().split(/\s+/).length;
+                const readingTime = Math.ceil(wordCount / wordsPerMinute);
+                
+                const timeSpan = post.querySelector('.post-meta span:last-child');
+                if (timeSpan && !timeSpan.textContent.includes('min read')) {
+                    timeSpan.textContent = `⏱️ ${readingTime} min read`;
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.post-card, .sidebar-widget, .featured-post');
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Utility function for debouncing
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func.apply(this, args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu.classList.contains('active')) {
+                    toggleMobileMenu();
+                }
+            }
+            
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.querySelector('.search-input').focus();
+            }
+        });
+
+        window.addEventListener('load', () => {
+            if ('performance' in window) {
+                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                console.log('⚡ BlockchainLatestNews load time:', loadTime + 'ms');
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('a[href*="#"]')) {
+                console.log('🔗 Internal link clicked:', e.target.href);
+            } else if (e.target.closest('.post-card, .featured-post')) {
+                console.log('📰 Blog post engagement');
+            } else if (e.target.closest('.nav-link')) {
+                console.log('🧭 Navigation used');
+            }
+        });
+
+        window.addEventListener('load', function() {
+            console.log('🚀 BlockchainLatestNews.com loaded successfully!');
+            
+            updateViewCounts();
+            initializeRealTimeFeatures();
+            initializeBrandFeatures();
+        });
+
+        function updateViewCounts() {
+            const viewCounts = document.querySelectorAll('.trending-meta');
+            viewCounts.forEach(count => {
+                if (count.textContent.includes('views')) {
+                    const currentViews = parseInt(count.textContent.replace(/[^\d]/g, ''));
+                    const increment = Math.floor(Math.random() * 5) + 1;
+                    const newViews = (currentViews + increment).toLocaleString();
+                    count.textContent = count.textContent.replace(/[\d,]+/, newViews);
+                }
+            });
+        }
+
+        function initializeRealTimeFeatures() {
+            setInterval(() => {
+                updateViewCounts();
+                console.log('📊 Real-time data updated');
+            }, 30000);
+        }
+
+        function initializeBrandFeatures() {
+            document.title = 'BlockchainLatestNews - Latest Crypto & Blockchain News';
+            
+            const metaDescription = document.createElement('meta');
+            metaDescription.name = 'description';
+            metaDescription.content = 'Stay updated with the latest blockchain and cryptocurrency news on BlockchainLatestNews.com. Your trusted source for Bitcoin, Ethereum, DeFi, and crypto market analysis.';
+            document.head.appendChild(metaDescription);
+            
+            const metaKeywords = document.createElement('meta');
+            metaKeywords.name = 'keywords';
+            metaKeywords.content = 'blockchain news, cryptocurrency news, bitcoin news, ethereum news, defi news, crypto market analysis, blockchain technology';
+            document.head.appendChild(metaKeywords);
+            
+            console.log('🏷️ BlockchainLatestNews.com brand initialized');
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('💾 SW registered successfully for BlockchainLatestNews');
+                    })
+                    .catch(error => {
+                        console.log('❌ SW registration failed');
+                    });
+            });
+        }
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleGesture();
+        });
+
+        function handleGesture() {
+            const swipeThreshold = 50;
+            const swipeDistance = touchEndX - touchStartX;
+            
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0) {
+                    console.log('👉 Swipe right detected');
+                } else {
+                    console.log('👈 Swipe left detected');
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu.classList.contains('active')) {
+                        toggleMobileMenu();
+                    }
+                }
+            }
+        }
+
+        function trackEngagement(action, category) {
+            console.log(`📈 BlockchainLatestNews Analytics: ${action} in ${category}`);
+        }
+
+        document.addEventListener('submit', function(e) {
+            if (e.target.classList.contains('newsletter-form')) {
+                trackEngagement('newsletter_subscription', 'engagement');
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.share-btn')) {
+                const platform = e.target.closest('.share-btn').onclick?.toString().match(/shareArticle\('(\w+)'\)/)?.[1];
+                trackEngagement('social_share', platform || 'unknown');
+            }
+        });
+    </script>
+</body>
+</html>

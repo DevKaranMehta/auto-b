@@ -1,0 +1,104 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Blog Management{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">📝 Blog Management</h1>
+    <a href="/admin/ai-generate" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        🤖 Generate New Blog
+    </a>
+</div>
+
+<!-- Success/Error Messages -->
+{% if request.query_params.get('success') %}
+<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+    {{ request.query_params.get('success') }}
+</div>
+{% endif %}
+
+{% if request.query_params.get('error') %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    {{ request.query_params.get('error') }}
+</div>
+{% endif %}
+
+<div class="bg-white rounded-lg shadow-lg">
+    <div class="p-6 border-b">
+        <h2 class="text-xl font-bold">All Blogs ({{ blogs|length }})</h2>
+    </div>
+    <div class="p-6">
+        {% if blogs %}
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="px-4 py-2 text-left">Title</th>
+                        <th class="px-4 py-2 text-left">Category</th>
+                        <th class="px-4 py-2 text-left">Status</th>
+                        <th class="px-4 py-2 text-left">Views</th>
+                        <th class="px-4 py-2 text-left">Created</th>
+                        <th class="px-4 py-2 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for blog in blogs %}
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-4 py-2">
+                            <div class="font-medium">{{ blog.title[:60] }}{% if blog.title|length > 60 %}...{% endif %}</div>
+                            <div class="text-sm text-gray-500">{{ blog.meta_description[:80] if blog.meta_description }}{% if blog.meta_description and blog.meta_description|length > 80 %}...{% endif %}</div>
+                            {% if blog.is_ai_generated %}
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">🤖 AI Generated</span>
+                            {% endif %}
+                            {% if blog.is_featured %}
+                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⭐ Featured</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2">
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">{{ blog.category }}</span>
+                        </td>
+                        <td class="px-4 py-2">
+                            {% if blog.is_published %}
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">✅ Published</span>
+                            {% else %}
+                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">📝 Draft</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2">{{ blog.view_count }}</td>
+                        <td class="px-4 py-2">{{ blog.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td class="px-4 py-2">
+                            <div class="flex space-x-2">
+                                <a href="/blog/{{ blog.slug }}" class="text-blue-600 hover:underline text-sm" target="_blank">👁️ View</a>
+                                <a href="/admin/blogs/edit/{{ blog.id }}" class="text-green-600 hover:underline text-sm">✏️ Edit</a>
+                                <button onclick="deleteBlog({{ blog.id }}, '{{ blog.title }}')" class="text-red-600 hover:underline text-sm">🗑️ Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-8 text-gray-500">
+            <h3 class="text-lg font-semibold mb-2">No blogs yet!</h3>
+            <p>Start by generating your first AI blog post.</p>
+            <a href="/admin/ai-generate" class="inline-block mt-4 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
+                🤖 Generate First Blog
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function deleteBlog(blogId, blogTitle) {
+    if (confirm(`Are you sure you want to delete "${blogTitle}"?\n\nThis action cannot be undone.`)) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/blogs/delete/${blogId}`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>
+{% endblock %}
