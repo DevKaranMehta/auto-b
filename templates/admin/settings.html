@@ -8,221 +8,105 @@
     <p class="page-subtitle">Configure your blockchain news platform</p>
 </div>
 
-<form action="{{ url_for('update_settings') }}" method="POST">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-        
-        <!-- AI Configuration -->
-        <div class="card">
-            <div class="card-header">
-                <h3>🤖 AI Configuration</h3>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label class="form-label">OpenAI API Key</label>
-                    <input type="password" name="openai_api_key" class="form-input" 
-                           placeholder="sk-..." 
-                           value="{{ settings.get('openai_api_key', '') }}">
-                    <small style="color: #666;">Required for AI content generation</small>
-                </div>
+<div class="card">
+    <div class="card-header">
+        <h3>⚙️ Configuration Settings</h3>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('admin_settings') }}" method="POST">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
                 
-                <div class="form-group">
-                    <label class="form-label">AI Model</label>
-                    <select name="ai_model" class="form-select">
-                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                        <option value="gpt-4">GPT-4</option>
-                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                    </select>
+                <!-- General Settings -->
+                <div>
+                    <h4 style="margin-bottom: 20px; color: #333;">General Settings</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Site Name</label>
+                        <input type="text" name="site_name" class="form-input" 
+                               value="{{ settings.get('site_name', 'Blockchain Latest News') }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Site Description</label>
+                        <textarea name="site_description" class="form-textarea" rows="3">{{ settings.get('site_description', 'Professional blockchain and cryptocurrency news platform') }}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Posts per Page</label>
+                        <input type="number" name="posts_per_page" class="form-input" 
+                               value="{{ settings.get('posts_per_page', '10') }}" min="1" max="50">
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Content Generation Frequency</label>
-                    <select name="generation_frequency" class="form-select">
-                        <option value="daily">Daily</option>
-                        <option value="weekly" selected>Weekly</option>
-                        <option value="biweekly">Bi-weekly</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" name="ai_generation_enabled" checked>
-                        <span>Enable AI content generation</span>
-                    </label>
-                </div>
-            </div>
-        </div>
 
-        <!-- SEO Settings -->
-        <div class="card">
-            <div class="card-header">
-                <h3>🔍 SEO Settings</h3>
+                <!-- AI Settings -->
+                <div>
+                    <h4 style="margin-bottom: 20px; color: #333;">AI Configuration</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label">OpenAI API Key</label>
+                        <input type="password" name="openai_api_key" class="form-input" 
+                               value="{{ settings.get('openai_api_key', '') }}" placeholder="sk-...">
+                        <small style="color: #666;">Required for AI content generation</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Content Freshness (days)</label>
+                        <input type="number" name="content_freshness_days" class="form-input" 
+                               value="{{ settings.get('content_freshness_days', '7') }}" min="1" max="30">
+                        <small style="color: #666;">Generate content about topics from last N days</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" name="ai_generation_enabled" 
+                                   {% if settings.get('ai_generation_enabled', 'true') == 'true' %}checked{% endif %}>
+                            <span>Enable AI content generation</span>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label class="form-label">Site Name</label>
-                    <input type="text" name="site_name" class="form-input" 
-                           value="Blockchain Latest News" 
-                           placeholder="Your site name">
+
+            <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #f0f0f0;">
+                <button type="submit" class="btn btn-primary" style="padding: 15px 40px; font-size: 1.1em;">
+                    💾 Save Settings
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 30px;">
+    <div class="card-header">
+        <h3>📊 Platform Status</h3>
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <div style="font-size: 2em; color: #28a745; margin-bottom: 10px;">✅</div>
+                <div style="font-weight: 600;">Database</div>
+                <div style="color: #666; font-size: 0.9em;">Connected</div>
+            </div>
+            
+            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <div style="font-size: 2em; color: #ffc107; margin-bottom: 10px;">🤖</div>
+                <div style="font-weight: 600;">AI System</div>
+                <div style="color: #666; font-size: 0.9em;">
+                    {{ 'Ready' if settings.get('openai_api_key') else 'Setup Required' }}
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Meta Description</label>
-                    <textarea name="meta_description" class="form-textarea" 
-                              placeholder="Professional blockchain and cryptocurrency news platform...">Professional blockchain and cryptocurrency news platform. Latest insights on DeFi, enterprise adoption, regulation, and market analysis.</textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Keywords</label>
-                    <input type="text" name="meta_keywords" class="form-input" 
-                           value="blockchain, cryptocurrency, DeFi, bitcoin, ethereum, crypto news" 
-                           placeholder="blockchain, cryptocurrency, DeFi...">
-                </div>
-                
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" name="sitemap_enabled" checked>
-                        <span>Enable automatic sitemap generation</span>
-                    </label>
-                </div>
+            </div>
+            
+            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <div style="font-size: 2em; color: #17a2b8; margin-bottom: 10px;">🔒</div>
+                <div style="font-weight: 600;">Security</div>
+                <div style="color: #666; font-size: 0.9em;">SSL Enabled</div>
+            </div>
+            
+            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <div style="font-size: 2em; color: #6f42c1; margin-bottom: 10px;">📱</div>
+                <div style="font-weight: 600;">Mobile</div>
+                <div style="color: #666; font-size: 0.9em;">Optimized</div>
             </div>
         </div>
     </div>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-        
-        <!-- Content Settings -->
-        <div class="card">
-            <div class="card-header">
-                <h3>📝 Content Settings</h3>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label class="form-label">Posts per Page</label>
-                    <input type="number" name="posts_per_page" class="form-input" 
-                           value="10" min="1" max="50">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Default Category</label>
-                    <select name="default_category" class="form-select">
-                        <option value="">No default</option>
-                        <option value="1">DeFi</option>
-                        <option value="2">Enterprise</option>
-                        <option value="3">Regulation</option>
-                        <option value="4">Technology</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Content Freshness (days)</label>
-                    <input type="number" name="content_freshness_days" class="form-input" 
-                           value="7" min="1" max="30">
-                    <small style="color: #666;">Only generate content about topics from the last N days</small>
-                </div>
-                
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" name="auto_publish" checked>
-                        <span>Auto-publish AI generated content</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics & Tracking -->
-        <div class="card">
-            <div class="card-header">
-                <h3>📊 Analytics & Tracking</h3>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label class="form-label">Google Analytics ID</label>
-                    <input type="text" name="google_analytics_id" class="form-input" 
-                           placeholder="G-XXXXXXXXXX">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Google Search Console</label>
-                    <input type="text" name="google_search_console" class="form-input" 
-                           placeholder="Verification code">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Social Media Handle</label>
-                    <input type="text" name="social_handle" class="form-input" 
-                           placeholder="@blockchainnews">
-                </div>
-                
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" name="track_analytics" checked>
-                        <span>Enable internal analytics tracking</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- API Settings -->
-    <div class="card">
-        <div class="card-header">
-            <h3>🔧 API & Integration Settings</h3>
-        </div>
-        <div class="card-body">
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
-                <div class="form-group">
-                    <label class="form-label">News API Key</label>
-                    <input type="password" name="news_api_key" class="form-input" 
-                           placeholder="Your news API key">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">CoinGecko API</label>
-                    <input type="password" name="coingecko_api" class="form-input" 
-                           placeholder="CoinGecko API key">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Email Service</label>
-                    <select name="email_service" class="form-select">
-                        <option value="smtp">SMTP</option>
-                        <option value="sendgrid">SendGrid</option>
-                        <option value="mailgun">Mailgun</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Save Button -->
-    <div style="text-align: center; margin-top: 30px;">
-        <button type="submit" class="btn btn-primary" style="padding: 15px 40px; font-size: 1.1em;">
-            💾 Save Settings
-        </button>
-    </div>
-</form>
-
-<script>
-// Show/hide password fields
-document.querySelectorAll('input[type="password"]').forEach(input => {
-    const container = input.parentElement;
-    const toggleBtn = document.createElement('button');
-    toggleBtn.type = 'button';
-    toggleBtn.innerHTML = '👁️';
-    toggleBtn.style.cssText = 'position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer;';
-    
-    container.style.position = 'relative';
-    container.appendChild(toggleBtn);
-    
-    toggleBtn.addEventListener('click', () => {
-        if (input.type === 'password') {
-            input.type = 'text';
-            toggleBtn.innerHTML = '🙈';
-        } else {
-            input.type = 'password';
-            toggleBtn.innerHTML = '👁️';
-        }
-    });
-});
-</script>
+</div>
 {% endblock %}

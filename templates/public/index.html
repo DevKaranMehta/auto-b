@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blockchain Latest News - Professional Crypto News Platform</title>
+    <title>{% if search %}Search: {{ search }} - {% endif %}{% if current_category %}{{ current_category|title }} - {% endif %}Blockchain Latest News</title>
     <meta name="description" content="Professional blockchain and cryptocurrency news platform. Latest insights on DeFi, enterprise adoption, regulation, and market analysis.">
     <style>
         :root {
@@ -63,7 +63,7 @@
         .post-card {
             background: white; border-radius: 15px; overflow: hidden;
             box-shadow: var(--shadow); margin-bottom: 30px;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; cursor: pointer;
         }
 
         .post-card:hover { transform: translateY(-8px); }
@@ -72,14 +72,42 @@
         .post-content { padding: 30px; }
         .post-title { 
             font-size: 1.5em; font-weight: 700; margin-bottom: 15px; 
-            color: var(--dark-bg);
+            color: var(--dark-bg); line-height: 1.3;
         }
+        .post-title a {
+            text-decoration: none; color: inherit;
+        }
+        .post-title a:hover { color: var(--primary-gold); }
+        
         .post-excerpt { color: var(--text-light); margin-bottom: 20px; }
+
+        .post-meta { 
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; font-size: 0.9em; color: var(--text-light);
+        }
+
+        .category-badge {
+            background: var(--primary-gold); color: white; padding: 6px 14px;
+            border-radius: 25px; font-size: 0.8em; font-weight: 600;
+        }
 
         .sidebar { display: grid; gap: 30px; }
         .sidebar-widget {
             background: white; border-radius: 15px; padding: 30px;
             box-shadow: var(--shadow);
+        }
+
+        .sidebar-widget h3 { margin-bottom: 20px; color: var(--dark-bg); }
+
+        .newsletter-form { display: grid; gap: 15px; }
+        .newsletter-form input {
+            padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 1em;
+        }
+        .newsletter-form button {
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-orange));
+            color: white; border: none; padding: 15px; border-radius: 10px;
+            font-weight: 600; cursor: pointer; font-size: 1em;
         }
 
         .footer {
@@ -100,30 +128,37 @@
             <a href="{{ url_for('index') }}" class="logo">⚡ Blockchain Latest News</a>
             <div class="nav-links">
                 <a href="{{ url_for('index') }}">Latest</a>
-                <a href="#defi">DeFi</a>
-                <a href="#enterprise">Enterprise</a>
-                <a href="#regulation">Regulation</a>
+                <a href="{{ url_for('index', category='defi') }}">DeFi</a>
+                <a href="{{ url_for('index', category='enterprise') }}">Enterprise</a>
+                <a href="{{ url_for('index', category='regulation') }}">Regulation</a>
                 <a href="{{ url_for('admin_login') }}">Admin</a>
             </div>
         </nav>
     </header>
 
     <main class="container">
+        {% if not search and not current_category %}
         <section class="hero">
             <h1>Stay Ahead of the Blockchain Revolution</h1>
             <p>Professional news, insights, and analysis from the world of cryptocurrency and blockchain technology</p>
         </section>
+        {% endif %}
 
         <div class="content">
             <section class="posts-section">
                 <h2>📈 Latest Blockchain News</h2>
                 
                 {% if featured_post %}
-                <article class="post-card featured">
+                <article class="post-card featured" onclick="window.location.href='{{ url_for('post_detail', slug=featured_post.slug) }}'">
                     <div class="post-content">
-                        <h3 class="post-title">{{ featured_post.title }}</h3>
+                        <h3 class="post-title">
+                            <a href="{{ url_for('post_detail', slug=featured_post.slug) }}">{{ featured_post.title }}</a>
+                        </h3>
                         <p class="post-excerpt">{{ featured_post.excerpt or featured_post.content[:200] }}...</p>
-                        <div style="color: #666; font-size: 0.9em;">
+                        <div class="post-meta">
+                            {% if featured_post.category_name %}
+                            <span class="category-badge">{{ featured_post.category_name }}</span>
+                            {% endif %}
                             <span>👁 {{ featured_post.views or 0 }} views</span>
                         </div>
                     </div>
@@ -131,12 +166,16 @@
                 {% endif %}
 
                 {% for post in posts %}
-                <article class="post-card">
+                <article class="post-card" onclick="window.location.href='{{ url_for('post_detail', slug=post.slug) }}'">
                     <div class="post-content">
-                        <h3 class="post-title">{{ post.title }}</h3>
+                        <h3 class="post-title">
+                            <a href="{{ url_for('post_detail', slug=post.slug) }}">{{ post.title }}</a>
+                        </h3>
                         <p class="post-excerpt">{{ post.excerpt or post.content[:150] }}...</p>
-                        <div style="color: #666; font-size: 0.9em;">
-                            <span>By {{ post.author }}</span> • 
+                        <div class="post-meta">
+                            {% if post.category_name %}
+                            <span class="category-badge">{{ post.category_name }}</span>
+                            {% endif %}
                             <span>👁 {{ post.views or 0 }} views</span>
                         </div>
                     </div>
@@ -155,17 +194,17 @@
             <aside class="sidebar">
                 <div class="sidebar-widget">
                     <h3>📧 Newsletter</h3>
-                    <p style="color: #666; margin-bottom: 20px;">Get the latest blockchain insights delivered to your inbox.</p>
-                    <form style="display: grid; gap: 15px;">
-                        <input type="email" placeholder="Your email address" style="padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px;" required>
-                        <button type="submit" style="background: linear-gradient(135deg, var(--primary-gold), var(--secondary-orange)); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 600; cursor: pointer;">Subscribe Now</button>
+                    <p style="color: #666; margin-bottom: 20px;">Get latest blockchain insights delivered to your inbox.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit">Subscribe Now</button>
                     </form>
                 </div>
 
                 <div class="sidebar-widget">
                     <h3>📊 Platform Stats</h3>
                     <div style="color: #666; line-height: 1.8;">
-                        <p>✅ <strong>{{ posts|length + (1 if featured_post else 0) }}</strong> Articles</p>
+                        <p>✅ <strong>{{ (posts|length) + (1 if featured_post else 0) }}</strong> Articles</p>
                         <p>🏷️ <strong>{{ categories|length if categories else 5 }}</strong> Categories</p>
                         <p>🔐 <strong>Secure</strong> Admin Panel</p>
                         <p>📱 <strong>Mobile</strong> Optimized</p>
