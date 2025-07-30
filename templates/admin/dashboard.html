@@ -123,3 +123,29 @@
     </div>
 </div>
 {% endblock %}
+
+<!-- Add this to your dashboard quick actions section -->
+<script>
+// Add a manual AI generation trigger
+function triggerAIGeneration() {
+    if (confirm('Generate AI posts now? This will create new articles based on your active topics.')) {
+        fetch('/admin/ai-scheduler/generate-now', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('✅ AI posts generated! Refresh to see new content.');
+                location.reload();
+            } else {
+                alert('❌ Generation failed. Check your settings.');
+            }
+        })
+        .catch(error => {
+            alert('❌ Error: ' + error.message);
+        });
+    }
+}
+</script>

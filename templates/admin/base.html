@@ -6,13 +6,11 @@
     <title>{% block title %}Admin Dashboard{% endblock %} - Blockchain News</title>
     <style>
         :root {
-            /* Binance/Blockchain Color Theme */
             --primary-gold: #F0B90B;
             --secondary-orange: #FF9500;
             --dark-bg: #1E2329;
             --darker-bg: #181A20;
             --light-gold: #FCD535;
-            --accent-yellow: #F0B90B;
             --text-white: #FFFFFF;
             --text-gray: #848E9C;
             --text-dark: #2B3139;
@@ -36,46 +34,100 @@
             font-size: 14px;
         }
 
-        /* Universal Top Navigation Bar */
-        .admin-topbar {
+        /* Top Header Bar (Like Screenshot) */
+        .admin-header {
             background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
-            padding: 0; box-shadow: var(--shadow-medium);
-            position: sticky; top: 0; z-index: 1000;
-            border-bottom: 3px solid var(--primary-gold);
+            border-bottom: 2px solid var(--primary-gold);
+            box-shadow: var(--shadow-medium);
         }
 
-        .topbar-container {
+        .header-top {
+            background: linear-gradient(90deg, var(--darker-bg), var(--dark-bg));
+            padding: 8px 0; font-size: 12px;
+            border-bottom: 1px solid rgba(240, 185, 11, 0.2);
+        }
+
+        .header-top-container {
             max-width: 1400px; margin: 0 auto; padding: 0 24px;
             display: flex; justify-content: space-between; align-items: center;
-            height: 64px;
+        }
+
+        .header-info {
+            display: flex; align-items: center; gap: 20px;
+            color: var(--text-gray); font-size: 12px;
+        }
+
+        .header-info span {
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .header-actions {
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        .header-btn {
+            background: none; border: 1px solid var(--primary-gold);
+            color: var(--primary-gold); padding: 4px 12px; border-radius: 4px;
+            font-size: 11px; cursor: pointer; transition: all 0.3s;
+            text-decoration: none; display: inline-flex; align-items: center;
+            gap: 4px;
+        }
+
+        .header-btn:hover {
+            background: var(--primary-gold); color: var(--dark-bg);
+        }
+
+        /* Main Navigation Bar */
+        .main-navbar {
+            padding: 12px 0;
+        }
+
+        .navbar-container {
+            max-width: 1400px; margin: 0 auto; padding: 0 24px;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         .admin-logo {
-            font-size: 1.5em; font-weight: 700; color: var(--primary-gold);
-            display: flex; align-items: center; gap: 10px;
+            font-size: 1.6em; font-weight: 700; color: var(--primary-gold);
+            display: flex; align-items: center; gap: 12px;
             text-decoration: none; transition: all 0.3s ease;
         }
 
         .admin-logo:hover {
-            color: var(--light-gold);
+            color: var(--light-gold); transform: scale(1.02);
         }
 
-        .admin-nav {
+        .logo-text {
+            display: flex; flex-direction: column; line-height: 1.2;
+        }
+
+        .logo-main {
+            font-size: 1em; font-weight: 700;
+        }
+
+        .logo-sub {
+            font-size: 0.6em; color: var(--text-gray);
+            font-weight: 400; margin-top: -2px;
+        }
+
+        .main-nav {
             display: flex; align-items: center; gap: 8px;
         }
 
         .nav-item {
             color: var(--text-white); text-decoration: none; 
-            padding: 10px 16px; border-radius: 8px; 
+            padding: 12px 18px; border-radius: 8px; 
             transition: all 0.3s ease; font-weight: 500;
             position: relative; font-size: 14px;
             border: 1px solid transparent;
+            display: flex; align-items: center; gap: 8px;
         }
 
         .nav-item:hover {
             background: var(--hover-bg); 
             color: var(--primary-gold);
-            border-color: var(--primary-gold);
+            border-color: rgba(240, 185, 11, 0.3);
+            transform: translateY(-1px);
         }
 
         .nav-item.active {
@@ -85,37 +137,53 @@
             box-shadow: 0 2px 8px rgba(240, 185, 11, 0.3);
         }
 
-        .user-menu {
+        .nav-icon {
+            font-size: 16px; opacity: 0.9;
+        }
+
+        .user-section {
             display: flex; align-items: center; gap: 16px;
-            color: var(--text-white); font-size: 14px;
+        }
+
+        .user-profile {
+            display: flex; align-items: center; gap: 12px;
+            background: rgba(255, 255, 255, 0.1); padding: 8px 16px;
+            border-radius: 25px; transition: all 0.3s;
+        }
+
+        .user-profile:hover {
+            background: rgba(240, 185, 11, 0.2);
         }
 
         .user-avatar {
-            width: 36px; height: 36px; border-radius: 50%;
+            width: 32px; height: 32px; border-radius: 50%;
             background: var(--primary-gold); display: flex; align-items: center;
             justify-content: center; font-weight: 700; color: var(--dark-bg);
             border: 2px solid var(--primary-gold);
         }
 
         .user-info {
-            display: flex; flex-direction: column;
+            display: flex; flex-direction: column; line-height: 1.2;
         }
 
         .user-name {
-            font-weight: 600; font-size: 14px;
+            font-weight: 600; font-size: 13px; color: var(--text-white);
         }
 
         .user-role {
-            font-size: 12px; color: var(--text-gray);
+            font-size: 11px; color: var(--text-gray);
         }
 
         .logout-btn {
             color: var(--text-gray); text-decoration: none;
-            transition: color 0.3s; font-size: 13px;
+            transition: color 0.3s; font-size: 12px;
+            padding: 6px 12px; border-radius: 6px;
+            border: 1px solid rgba(132, 142, 156, 0.3);
         }
 
         .logout-btn:hover {
             color: var(--primary-gold);
+            border-color: var(--primary-gold);
         }
 
         /* Main Content */
@@ -149,7 +217,7 @@
             border-color: var(--success-green);
         }
 
-        .alert-danger {
+        .alert-danger, .alert-error {
             background: rgba(248, 73, 96, 0.1); 
             color: var(--error-red); 
             border-color: var(--error-red);
@@ -227,18 +295,8 @@
             background: var(--success-green); color: var(--text-white);
         }
 
-        .btn-success:hover {
-            background: #01A060;
-            transform: translateY(-2px);
-        }
-
         .btn-danger {
             background: var(--error-red); color: var(--text-white);
-        }
-
-        .btn-danger:hover {
-            background: #E73C57;
-            transform: translateY(-2px);
         }
 
         .btn-outline {
@@ -358,44 +416,15 @@
             color: var(--text-gray); font-size: 1em; font-weight: 500;
         }
 
-        /* Quick actions grid */
-        .actions-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .action-card {
-            background: var(--card-bg); padding: 24px; border-radius: 12px;
-            box-shadow: var(--shadow-light); text-align: center;
-            transition: all 0.3s ease; text-decoration: none;
-            border: 2px solid transparent;
-        }
-
-        .action-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-medium);
-            border-color: var(--primary-gold);
-        }
-
-        .action-icon {
-            font-size: 2.5em; margin-bottom: 16px;
-            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-orange));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .action-label {
-            font-weight: 600; color: var(--text-dark);
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
-            .admin-nav { display: none; }
-            .topbar-container { justify-content: space-between; }
+            .main-nav { display: none; }
+            .navbar-container { justify-content: space-between; }
             .main-content { padding: 20px 16px; }
             .page-title { font-size: 1.8em; }
             .stats-grid { grid-template-columns: 1fr; }
-            .actions-grid { grid-template-columns: repeat(2, 1fr); }
+            .header-info { display: none; }
+            .user-info { display: none; }
         }
 
         /* Mobile menu toggle */
@@ -412,46 +441,71 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Universal Top Navigation -->
-    <nav class="admin-topbar">
-        <div class="topbar-container">
-            <a href="{{ url_for('admin_dashboard') }}" class="admin-logo">
-                🚀 Blockchain News Admin
-            </a>
-            
-            <div class="admin-nav">
-                <a href="{{ url_for('admin_dashboard') }}" class="nav-item {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
-                    📊 Dashboard
-                </a>
-                <a href="{{ url_for('admin_posts') }}" class="nav-item {% if request.endpoint in ['admin_posts', 'admin_new_post', 'admin_edit_post'] %}active{% endif %}">
-                    📝 Posts
-                </a>
-                <a href="{{ url_for('admin_new_post') }}" class="nav-item {% if request.endpoint == 'admin_new_post' %}active{% endif %}">
-                    ✏️ New Post
-                </a>
-                <a href="{{ url_for('admin_topics') }}" class="nav-item {% if request.endpoint == 'admin_topics' %}active{% endif %}">
-                    📂 Topics
-                </a>
-                <a href="{{ url_for('admin_settings') }}" class="nav-item {% if request.endpoint == 'admin_settings' %}active{% endif %}">
-                    ⚙️ Settings
-                </a>
-                <a href="{{ url_for('index') }}" class="nav-item" target="_blank">
-                    🌐 View Site
-                </a>
-            </div>
-
-            <div class="user-menu">
-                <div class="user-avatar">{{ session.admin_username[0]|upper if session.admin_username else 'A' }}</div>
-                <div class="user-info">
-                    <div class="user-name">{{ session.admin_username or 'Admin' }}</div>
-                    <div class="user-role">Administrator</div>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <!-- Top Header Bar -->
+        <div class="header-top">
+            <div class="header-top-container">
+                <div class="header-info">
+                    <span>🌐 Live: blockchainlatestnews.com</span>
+                    <span>📊 Server: Online</span>
+                    <span>🕒 {{ moment().format('MMM DD, YYYY HH:mm') if moment else 'Online' }}</span>
                 </div>
-                <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a>
+                <div class="header-actions">
+                    <a href="{{ url_for('index') }}" target="_blank" class="header-btn">
+                        🌐 View Site
+                    </a>
+                    <a href="#" class="header-btn">
+                        🔧 Support
+                    </a>
+                </div>
             </div>
-
-            <button class="mobile-menu-toggle">☰</button>
         </div>
-    </nav>
+
+        <!-- Main Navigation -->
+        <div class="main-navbar">
+            <div class="navbar-container">
+                <a href="{{ url_for('admin_dashboard') }}" class="admin-logo">
+                    🚀 
+                    <div class="logo-text">
+                        <div class="logo-main">Blockchain News</div>
+                        <div class="logo-sub">ADMIN DASHBOARD</div>
+                    </div>
+                </a>
+                
+                <nav class="main-nav">
+                    <a href="{{ url_for('admin_dashboard') }}" class="nav-item {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                        <span class="nav-icon">📊</span> Dashboard
+                    </a>
+                    <a href="{{ url_for('admin_posts') }}" class="nav-item {% if request.endpoint in ['admin_posts', 'admin_new_post', 'admin_edit_post'] %}active{% endif %}">
+                        <span class="nav-icon">📝</span> Posts
+                    </a>
+                    <a href="{{ url_for('admin_new_post') }}" class="nav-item {% if request.endpoint == 'admin_new_post' %}active{% endif %}">
+                        <span class="nav-icon">✏️</span> Create
+                    </a>
+                    <a href="{{ url_for('admin_topics') }}" class="nav-item {% if request.endpoint == 'admin_topics' %}active{% endif %}">
+                        <span class="nav-icon">📂</span> Topics
+                    </a>
+                    <a href="{{ url_for('admin_settings') }}" class="nav-item {% if request.endpoint == 'admin_settings' %}active{% endif %}">
+                        <span class="nav-icon">⚙️</span> Settings
+                    </a>
+                </nav>
+
+                <div class="user-section">
+                    <div class="user-profile">
+                        <div class="user-avatar">{{ session.admin_username[0]|upper if session.admin_username else 'A' }}</div>
+                        <div class="user-info">
+                            <div class="user-name">{{ session.admin_username or 'Admin' }}</div>
+                            <div class="user-role">Administrator</div>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a>
+                </div>
+
+                <button class="mobile-menu-toggle">☰</button>
+            </div>
+        </div>
+    </header>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -459,7 +513,7 @@
             {% if messages %}
                 {% for category, message in messages %}
                 <div class="alert alert-{{ 'success' if category == 'message' else category }}">
-                    {% if category == 'success' or category == 'message' %}✅{% elif category == 'danger' %}❌{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+                    {% if category == 'success' or category == 'message' %}✅{% elif category == 'danger' or category == 'error' %}❌{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
                     {{ message }}
                 </div>
                 {% endfor %}
