@@ -1,0 +1,213 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Queue Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Task Queue Management</h1>
+            <p class="page-subtitle">Monitor and manage scheduled tasks and AI content generation</p>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <form method="POST" action="{{ url_for('pause_scheduler') }}" style="display: inline;">
+                <button type="submit" class="btn {% if scheduler_paused %}btn-success{% else %}btn-warning{% endif %}">
+                    {% if scheduler_paused %}▶️ Resume{% else %}⏸️ Pause{% endif %} Scheduler
+                </button>
+            </form>
+            <form method="POST" action="{{ url_for('clear_completed_tasks') }}" style="display: inline;"
+                  onsubmit="return confirm('Clear all completed tasks? This cannot be undone.')">
+                <button type="submit" class="btn btn-secondary">🗑️ Clear Completed</button>
+            </form>
+            <button onclick="location.reload()" class="btn btn-outline">🔄 Refresh</button>
+        </div>
+    </div>
+</div>
+
+<!-- Queue Statistics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-number">{{ stats.get('PENDING', 0) }}</div>
+        <div class="stat-label">Pending Tasks</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">🏃</div>
+        <div class="stat-number">{{ stats.get('RUNNING', 0) }}</div>
+        <div class="stat-label">Running Tasks</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-number">{{ stats.get('COMPLETED', 0) }}</div>
+        <div class="stat-label">Completed</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">❌</div>
+        <div class="stat-number">{{ stats.get('FAILED', 0) + stats.get('CANCELLED', 0) }}</div>
+        <div class="stat-label">Failed/Cancelled</div>
+    </div>
+</div>
+
+<!-- Next Scheduled Task -->
+{% if next_scheduled %}
+<div class="card" style="margin-bottom: 24px;">
+    <div class="card-header">
+        <h3 class="card-title">⏰ Next Scheduled Task</h3>
+    </div>
+    <div class="card-body">
+        <div style="font-size: 1.2em; color: var(--primary-gold); font-weight: 600;">
+            {{ next_scheduled.strftime('%B %d, %Y at %I:%M %p') }}
+        </div>
+        <div style="color: var(--text-gray); margin-top: 8px;">
+            {% set time_diff = (next_scheduled - moment.utcnow()).total_seconds() %}
+            {% if time_diff > 0 %}
+                In {{ (time_diff // 3600)|int }}h {{ ((time_diff % 3600) // 60)|int }}m
+            {% else %}
+                Overdue by {{ ((-time_diff) // 60)|int }} minutes
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Task Queue Table -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">📋 Task Queue ({{ tasks|length }} tasks)</h3>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        {% if tasks %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Task Type</th>
+                    <th>Topic</th>
+                    <th>Priority</th>
+                    <th>Scheduled</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 600;">{{ task.task_type }}</div>
+                        {% if task.error_message %}
+                        <div style="color: var(--error-red); font-size: 12px; margin-top: 4px;">
+                            {{ task.error_message[:50] }}{% if task.error_message|length > 50 %}...{% endif %}
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>{{ task.topic_name or 'General' }}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            {% for i in range(task.priority or 1) %}
+                            <span style="color: var(--primary-gold);">⭐</span>
+                            {% endfor %}
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--text-gray);">{{ task.priority or 1 }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div>{{ task.scheduled_time.strftime('%m/%d %I:%M %p') }}</div>
+                        {% set time_diff = (task.scheduled_time - moment.utcnow()).total_seconds() %}
+                        <div style="font-size: 12px; color: var(--text-gray);">
+                            {% if time_diff > 0 %}
+                                In {{ (time_diff // 60)|int }}m
+                            {% else %}
+                                {{ ((-time_diff) // 60)|int }}m ago
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        {% if task.status == 'PENDING' %}
+                        <span class="status-badge" style="background: rgba(255, 167, 38, 0.1); color: var(--warning-orange);">PENDING</span>
+                        {% elif task.status == 'RUNNING' %}
+                        <span class="status-badge" style="background: rgba(14, 205, 240, 0.1); color: var(--info-blue);">RUNNING</span>
+                        {% elif task.status == 'COMPLETED' %}
+                        <span class="status-badge status-active">COMPLETED</span>
+                        {% elif task.status == 'FAILED' %}
+                        <span class="status-badge" style="background: rgba(248, 73, 96, 0.1); color: var(--error-red);">FAILED</span>
+                        {% elif task.status == 'CANCELLED' %}
+                        <span class="status-badge status-inactive">CANCELLED</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div>{{ task.created_at.strftime('%m/%d') }}</div>
+                        <div style="font-size: 12px; color: var(--text-gray);">{{ task.created_at.strftime('%I:%M %p') }}</div>
+                    </td>
+                    <td>
+                        {% if task.status in ['PENDING', 'RUNNING'] %}
+                        <form method="POST" action="{{ url_for('cancel_queue_task', task_id=task.id) }}" style="display: inline;"
+                              onsubmit="return confirm('Cancel this task?')">
+                            <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">
+                                Cancel
+                            </button>
+                        </form>
+                        {% else %}
+                        <span style="color: var(--text-gray); font-size: 12px;">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div style="text-align: center; padding: 60px 20px; color: var(--text-gray);">
+            <div style="font-size: 4em; margin-bottom: 20px; opacity: 0.5;">📋</div>
+            <h3>No tasks in queue</h3>
+            <p>Tasks will appear here when they are scheduled for execution.</p>
+            <div style="margin-top: 20px;">
+                <a href="{{ url_for('admin_topics') }}" class="btn btn-primary">Manage Topics</a>
+                <a href="{{ url_for('admin_settings') }}" class="btn btn-secondary" style="margin-left: 12px;">Configure Scheduler</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Queue Health Status -->
+<div class="card" style="margin-top: 24px;">
+    <div class="card-header">
+        <h3 class="card-title">🏥 System Health</h3>
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+            <div style="text-align: center; padding: 16px; background: {{ 'rgba(2, 192, 118, 0.1)' if not scheduler_paused else 'rgba(255, 167, 38, 0.1)' }}; border-radius: 10px;">
+                <div style="font-size: 1.5em; margin-bottom: 8px;">{{ '🟢' if not scheduler_paused else '🟡' }}</div>
+                <div style="font-weight: 600;">Scheduler</div>
+                <div style="font-size: 12px; color: var(--text-gray);">{{ 'Active' if not scheduler_paused else 'Paused' }}</div>
+            </div>
+            
+            <div style="text-align: center; padding: 16px; background: rgba(2, 192, 118, 0.1); border-radius: 10px;">
+                <div style="font-size: 1.5em; margin-bottom: 8px;">💾</div>
+                <div style="font-weight: 600;">Database</div>
+                <div style="font-size: 12px; color: var(--text-gray);">Connected</div>
+            </div>
+            
+            <div style="text-align: center; padding: 16px; background: rgba(240, 185, 11, 0.1); border-radius: 10px;">
+                <div style="font-size: 1.5em; margin-bottom: 8px;">📊</div>
+                <div style="font-weight: 600;">Queue Size</div>
+                <div style="font-size: 12px; color: var(--text-gray);">{{ tasks|length }} tasks</div>
+            </div>
+            
+            <div style="text-align: center; padding: 16px; background: rgba(14, 205, 240, 0.1); border-radius: 10px;">
+                <div style="font-size: 1.5em; margin-bottom: 8px;">⚡</div>
+                <div style="font-weight: 600;">Throughput</div>
+                <div style="font-size: 12px; color: var(--text-gray);">{{ stats.get('COMPLETED', 0) }} completed</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto refresh every 30 seconds
+setTimeout(function() {
+    location.reload();
+}, 30000);
+</script>
+{% endblock %}

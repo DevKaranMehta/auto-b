@@ -34,7 +34,7 @@
             font-size: 14px;
         }
 
-        /* Top Header Bar (Like Screenshot) */
+        /* Admin Header */
         .admin-header {
             background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
             border-bottom: 2px solid var(--primary-gold);
@@ -449,7 +449,7 @@
                 <div class="header-info">
                     <span>🌐 Live: blockchainlatestnews.com</span>
                     <span>📊 Server: Online</span>
-                    <span>🕒 {{ moment().format('MMM DD, YYYY HH:mm') if moment else 'Online' }}</span>
+                    <span>🕒 Online</span>
                 </div>
                 <div class="header-actions">
                     <a href="{{ url_for('index') }}" target="_blank" class="header-btn">
@@ -485,6 +485,9 @@
                     </a>
                     <a href="{{ url_for('admin_topics') }}" class="nav-item {% if request.endpoint == 'admin_topics' %}active{% endif %}">
                         <span class="nav-icon">📂</span> Topics
+                    </a>
+                    <a href="{{ url_for('admin_queue') }}" class="nav-item {% if request.endpoint == 'admin_queue' %}active{% endif %}">
+                        <span class="nav-icon">📋</span> Queue
                     </a>
                     <a href="{{ url_for('admin_settings') }}" class="nav-item {% if request.endpoint == 'admin_settings' %}active{% endif %}">
                         <span class="nav-icon">⚙️</span> Settings

@@ -5,283 +5,85 @@
 {% block content %}
 <div class="page-header">
     <h1 class="page-title">Platform Settings</h1>
-    <p class="page-subtitle">Configure your blockchain news platform and AI content generation</p>
+    <p class="page-subtitle">Configure AI scheduling with multiple frequency options</p>
 </div>
 
 <form action="{{ url_for('update_settings') }}" method="POST">
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 32px; margin-bottom: 30px;">
-        
-        <!-- Main Settings Column -->
-        <div style="display: grid; gap: 24px;">
-            
-            <!-- General Settings -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">🌐 General Settings</h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label class="form-label">Site Name</label>
-                        <input type="text" name="site_name" class="form-input" 
-                               value="{{ settings.get('site_name', 'Blockchain Latest News') }}"
-                               placeholder="Your website name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Site Description</label>
-                        <textarea name="site_description" class="form-textarea" rows="3"
-                                  placeholder="Brief description of your platform">{{ settings.get('site_description', 'Professional blockchain and cryptocurrency news platform') }}</textarea>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label class="form-label">Posts per Page</label>
-                            <input type="number" name="posts_per_page" class="form-input" 
-                                   value="{{ settings.get('posts_per_page', '10') }}" min="1" max="50">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Content Freshness (days)</label>
-                            <input type="number" name="content_freshness_days" class="form-input" 
-                                   value="{{ settings.get('content_freshness_days', '7') }}" min="1" max="30">
-                            <small style="color: var(--text-gray); font-size: 12px;">Only use topics from last N days</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Configuration -->
-            <div class="card">
-                <div class="card-header">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h3 class="card-title">🤖 AI Content Generation</h3>
-                        <button type="button" onclick="testGenerateNow()" class="btn btn-success" style="padding: 8px 16px; font-size: 12px;">
-                            🚀 Generate Now
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label class="form-label">OpenAI API Key</label>
-                        <input type="password" name="openai_api_key" class="form-input" 
-                               value="{{ settings.get('openai_api_key', '') }}" 
-                               placeholder="sk-... (optional - using template system if empty)">
-                        <small style="color: var(--text-gray); font-size: 12px;">Leave empty to use built-in content templates</small>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label class="form-label">Posts per Day (1-20)</label>
-                            <select name="posts_per_day" class="form-select">
-                                {% for i in range(1, 21) %}
-                                <option value="{{ i }}" {% if settings.get('posts_per_day', '3') == i|string %}selected{% endif %}>{{ i }} Post{{ 's' if i > 1 else '' }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Generation Interval</label>
-                            <select name="generation_interval_hours" class="form-select">
-                                {% for hour in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] %}
-                                <option value="{{ hour }}" {% if settings.get('generation_interval_hours', '24') == hour|string %}selected{% endif %}>
-                                    Every {{ hour }} Hour{{ 's' if hour > 1 else '' }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Timing Options</label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div>
-                                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 12px;">
-                                    <input type="radio" name="timing_mode" value="static" 
-                                           {% if settings.get('timing_mode', 'static') == 'static' %}checked{% endif %}
-                                           style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
-                                    <span>Static Time</span>
-                                </label>
-                                <input type="time" name="generation_schedule_time" class="form-input" 
-                                       value="{{ settings.get('generation_schedule_time', '09:00') }}"
-                                       style="margin-left: 30px;">
-                            </div>
-                            <div>
-                                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 12px;">
-                                    <input type="radio" name="timing_mode" value="random" 
-                                           {% if settings.get('timing_mode', 'static') == 'random' %}checked{% endif %}
-                                           style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
-                                    <span>Random Timing</span>
-                                </label>
-                                <div style="font-size: 12px; color: var(--text-gray); margin-left: 30px;">
-                                    Posts at random times within the interval
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Advanced Scheduling</label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div>
-                                <label class="form-label" style="font-size: 12px;">Active Hours (From)</label>
-                                <input type="time" name="active_hours_start" class="form-input" 
-                                       value="{{ settings.get('active_hours_start', '06:00') }}">
-                            </div>
-                            <div>
-                                <label class="form-label" style="font-size: 12px;">Active Hours (To)</label>
-                                <input type="time" name="active_hours_end" class="form-input" 
-                                       value="{{ settings.get('active_hours_end', '22:00') }}">
-                            </div>
-                        </div>
-                        <small style="color: var(--text-gray); font-size: 12px;">AI will only generate posts within these hours</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Generation Options</label>
-                        <div style="display: grid; gap: 12px;">
-                            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                                <input type="checkbox" name="ai_generation_enabled" 
-                                       {% if settings.get('ai_generation_enabled', 'true') == 'true' %}checked{% endif %}
-                                       style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
-                                <span>Enable AI content generation</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                                <input type="checkbox" name="auto_publish_enabled" 
-                                       {% if settings.get('auto_publish_enabled', 'true') == 'true' %}checked{% endif %}
-                                       style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
-                                <span>Auto-publish generated content</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                                <input type="checkbox" name="weekend_generation" 
-                                       {% if settings.get('weekend_generation', 'true') == 'true' %}checked{% endif %}
-                                       style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
-                                <span>Generate content on weekends</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                                <input type="checkbox" name="smart_topic_rotation" 
-                                       {% if settings.get('smart_topic_rotation', 'true') == 'true' %}checked{% endif %}
-                                       style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
-                                <span>Smart topic rotation (avoid duplicates)</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                                <input type="checkbox" name="priority_based_selection" 
-                                       {% if settings.get('priority_based_selection', 'true') == 'true' %}checked{% endif %}
-                                       style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
-                                <span>Use topic priority for selection</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Real-time Generation Status -->
-                    <div style="background: rgba(240, 185, 11, 0.1); padding: 16px; border-radius: 12px; border-left: 4px solid var(--primary-gold);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <strong style="color: var(--primary-gold);">Generation Status</strong>
-                            <span id="statusIndicator" style="font-size: 12px; color: var(--text-gray);">Checking...</span>
-                        </div>
-                        <div id="generationInfo" style="font-size: 12px; color: var(--text-gray);">
-                            Loading generation statistics...
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">🤖 AI Content Generation & Scheduling</h3>
         </div>
-
-        <!-- Sidebar Column -->
-        <div style="display: grid; gap: 24px;">
+        <div class="card-body">
             
-            <!-- Platform Status -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">📊 Platform Status</h3>
-                </div>
-                <div class="card-body">
-                    <div style="display: grid; gap: 16px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(2, 192, 118, 0.1); border-radius: 8px;">
-                            <div>
-                                <div style="font-weight: 600; color: var(--success-green);">Database</div>
-                                <div style="font-size: 12px; color: var(--text-gray);">Connected</div>
-                            </div>
-                            <div style="font-size: 1.5em; color: var(--success-green);">✅</div>
-                        </div>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(2, 192, 118, 0.1); border-radius: 8px;">
-                            <div>
-                                <div style="font-weight: 600; color: var(--success-green);">AI System</div>
-                                <div style="font-size: 12px; color: var(--text-gray);">Template Ready</div>
-                            </div>
-                            <div style="font-size: 1.5em; color: var(--success-green);">🤖</div>
-                        </div>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(14, 205, 240, 0.1); border-radius: 8px;">
-                            <div>
-                                <div style="font-weight: 600; color: var(--info-blue);">Security</div>
-                                <div style="font-size: 12px; color: var(--text-gray);">SSL Active</div>
-                            </div>
-                            <div style="font-size: 1.5em; color: var(--info-blue);">🔒</div>
-                        </div>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(240, 185, 11, 0.1); border-radius: 8px;">
-                            <div>
-                                <div style="font-weight: 600; color: var(--primary-gold);">Scheduler</div>
-                                <div style="font-size: 12px; color: var(--text-gray);" id="schedulerStatus">Active</div>
-                            </div>
-                            <div style="font-size: 1.5em; color: var(--primary-gold);">⏰</div>
-                        </div>
-                    </div>
+            <!-- Generation Settings -->
+            <div class="form-group">
+                <label class="form-label">Posts per Day (1-20)</label>
+                <select name="posts_per_day" class="form-select">
+                    {% for i in range(1, 21) %}
+                    <option value="{{ i }}" {% if settings.get('posts_per_day', '3') == i|string %}selected{% endif %}>{{ i }} Post{{ 's' if i > 1 else '' }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Schedule Frequency Options -->
+            <div class="form-group">
+                <label class="form-label">Schedule Frequency</label>
+                <select name="schedule_frequency" class="form-select" onchange="toggleScheduleOptions(this.value)">
+                    <option value="every_minute" {% if settings.get('schedule_frequency', 'daily') == 'every_minute' %}selected{% endif %}>Every Minute</option>
+                    <option value="hourly" {% if settings.get('schedule_frequency', 'daily') == 'hourly' %}selected{% endif %}>Every Hour</option>
+                    <option value="every_3_hours" {% if settings.get('schedule_frequency', 'daily') == 'every_3_hours' %}selected{% endif %}>Every 3 Hours</option>
+                    <option value="every_6_hours" {% if settings.get('schedule_frequency', 'daily') == 'every_6_hours' %}selected{% endif %}>Every 6 Hours</option>
+                    <option value="every_9_hours" {% if settings.get('schedule_frequency', 'daily') == 'every_9_hours' %}selected{% endif %}>Every 9 Hours</option>
+                    <option value="daily" {% if settings.get('schedule_frequency', 'daily') == 'daily' %}selected{% endif %}>Daily</option>
+                    <option value="weekly" {% if settings.get('schedule_frequency', 'daily') == 'weekly' %}selected{% endif %}>Weekly</option>
+                    <option value="monthly" {% if settings.get('schedule_frequency', 'daily') == 'monthly' %}selected{% endif %}>Monthly</option>
+                </select>
+                <small style="color: var(--text-gray); font-size: 12px;">Choose how often AI should generate posts</small>
+            </div>
+
+            <!-- Time Settings (for daily/weekly/monthly) -->
+            <div class="form-group" id="timeSettings">
+                <label class="form-label">Generation Time</label>
+                <input type="time" name="generation_schedule_time" class="form-input" 
+                       value="{{ settings.get('generation_schedule_time', '09:00') }}">
+                <small style="color: var(--text-gray); font-size: 12px;">Time to run scheduled generation</small>
+            </div>
+
+            <!-- Generation Options -->
+            <div class="form-group">
+                <label class="form-label">Generation Options</label>
+                <div style="display: grid; gap: 12px;">
+                    <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" name="ai_generation_enabled" 
+                               {% if settings.get('ai_generation_enabled', 'true') == 'true' %}checked{% endif %}
+                               style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
+                        <span>Enable AI content generation</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" name="auto_publish_enabled" 
+                               {% if settings.get('auto_publish_enabled', 'true') == 'true' %}checked{% endif %}
+                               style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
+                        <span>Auto-publish generated content</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" name="weekend_generation" 
+                               {% if settings.get('weekend_generation', 'true') == 'true' %}checked{% endif %}
+                               style="width: 18px; height: 18px; accent-color: var(--primary-gold);">
+                        <span>Generate content on weekends</span>
+                    </label>
                 </div>
             </div>
 
-            <!-- Generation Preview -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">⏰ Schedule Preview</h3>
-                </div>
-                <div class="card-body">
-                    <div style="font-size: 13px; color: var(--text-gray); line-height: 1.6;">
-                        <div style="margin-bottom: 8px;">
-                            <strong>Mode:</strong><br>
-                            <span id="timingModePreview">{{ 'Random Timing' if settings.get('timing_mode', 'static') == 'random' else 'Static Time' }}</span>
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong>Schedule:</strong><br>
-                            <span id="schedulePreview">{{ settings.get('generation_schedule_time', '09:00') }} daily</span>
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong>Posts per Day:</strong><br>
-                            {{ settings.get('posts_per_day', '3') }} articles
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong>Interval:</strong><br>
-                            Every {{ settings.get('generation_interval_hours', '24') }} hour(s)
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong>Active Hours:</strong><br>
-                            {{ settings.get('active_hours_start', '06:00') }} - {{ settings.get('active_hours_end', '22:00') }}
-                        </div>
-                        <div>
-                            <strong>Auto-publish:</strong><br>
-                            {{ 'Yes' if settings.get('auto_publish_enabled', 'true') == 'true' else 'No' }}
-                        </div>
+            <!-- Quick Test Section -->
+            <div style="background: rgba(240, 185, 11, 0.1); padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary-gold); margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="color: var(--primary-gold);">Quick Test</strong>
+                        <p style="color: var(--text-gray); font-size: 12px; margin: 4px 0;">Test AI generation immediately</p>
                     </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">⚡ Quick Actions</h3>
-                </div>
-                <div class="card-body">
-                    <div style="display: grid; gap: 12px;">
-                        <button type="button" onclick="testGenerateNow()" class="btn btn-primary" style="width: 100%;">
-                            🚀 Generate Posts Now
-                        </button>
-                        <button type="button" onclick="viewGenerationLog()" class="btn btn-secondary" style="width: 100%;">
-                            📋 View Generation Log
-                        </button>
-                        <button type="button" onclick="resetScheduler()" class="btn btn-outline" style="width: 100%;">
-                            🔄 Reset Scheduler
-                        </button>
-                    </div>
+                    <button type="button" onclick="testGenerateNow()" class="btn btn-success">
+                        🚀 Generate Now
+                    </button>
                 </div>
             </div>
         </div>
@@ -290,12 +92,52 @@
     <!-- Save Button -->
     <div style="text-align: center; margin-top: 32px;">
         <button type="submit" class="btn btn-primary" style="padding: 16px 48px; font-size: 1.1em;">
-            💾 Save Settings
+            💾 Save Settings & Restart Scheduler
         </button>
     </div>
 </form>
 
+<!-- Status Display -->
+<div class="card" style="margin-top: 24px;">
+    <div class="card-header">
+        <h3 class="card-title">📊 Current Schedule Status</h3>
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+            <div style="text-align: center; padding: 16px; background: rgba(2, 192, 118, 0.1); border-radius: 10px;">
+                <div style="font-size: 1.5em; margin-bottom: 8px;">🤖</div>
+                <div style="font-weight: 600;">AI Generation</div>
+                <div style="font-size: 12px; color: var(--text-gray);">{{ 'Enabled' if settings.get('ai_generation_enabled', 'true') == 'true' else 'Disabled' }}</div>
+            </div>
+            
+            <div style="text-align: center; padding: 16px; background: rgba(240, 185, 11, 0.1); border-radius: 10px;">
+                <div style="font-size: 1.5em; margin-bottom: 8px;">⏰</div>
+                <div style="font-weight: 600;">Frequency</div>
+                <div style="font-size: 12px; color: var(--text-gray);">{{ settings.get('schedule_frequency', 'daily').replace('_', ' ').title() }}</div>
+            </div>
+            
+            <div style="text-align: center; padding: 16px; background: rgba(14, 205, 240, 0.1); border-radius: 10px;">
+                <div style="font-size: 1.5em; margin-bottom: 8px;">📝</div>
+                <div style="font-weight: 600;">Posts per Day</div>
+                <div style="font-size: 12px; color: var(--text-gray);">{{ settings.get('posts_per_day', '3') }} articles</div>
+            </div>
+            
+            <div style="text-align: center; padding: 16px; background: rgba(248, 73, 96, 0.1); border-radius: 10px;">
+                <div style="font-size: 1.5em; margin-bottom: 8px;">🚀</div>
+                <div style="font-weight: 600;">Auto Publish</div>
+                <div style="font-size: 12px; color: var(--text-gray);">{{ 'Yes' if settings.get('auto_publish_enabled', 'true') == 'true' else 'No' }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+function toggleScheduleOptions(frequency) {
+    const timeSettings = document.getElementById('timeSettings');
+    const needsTime = ['daily', 'weekly', 'monthly'].includes(frequency);
+    timeSettings.style.display = needsTime ? 'block' : 'none';
+}
+
 function testGenerateNow() {
     const btn = event.target;
     const originalText = btn.innerHTML;
@@ -310,10 +152,10 @@ function testGenerateNow() {
     })
     .then(response => {
         if (response.ok) {
-            alert('✅ AI post generation triggered! Check your posts dashboard.');
-            location.reload();
+            alert('✅ AI post generation triggered successfully! Check your posts dashboard.');
+            setTimeout(() => location.reload(), 2000);
         } else {
-            alert('❌ Generation failed. Please check your settings.');
+            alert('❌ Generation failed. Please check your settings and topics.');
         }
     })
     .catch(error => {
@@ -326,37 +168,9 @@ function testGenerateNow() {
     });
 }
 
-function viewGenerationLog() {
-    // Implement generation log viewer
-    alert('Generation log feature will be implemented');
-}
-
-function resetScheduler() {
-    if (confirm('Reset the AI generation scheduler? This will restart all scheduled tasks.')) {
-        alert('Scheduler reset functionality will be implemented');
-    }
-}
-
-// Update preview when settings change
-document.querySelectorAll('input[name="timing_mode"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        const preview = document.getElementById('timingModePreview');
-        preview.textContent = this.value === 'random' ? 'Random Timing' : 'Static Time';
-    });
-});
-
-document.querySelector('input[name="generation_schedule_time"]').addEventListener('change', function() {
-    const preview = document.getElementById('schedulePreview');
-    preview.textContent = this.value + ' daily';
-});
-
-// Load generation status on page load
+// Initialize display
 window.addEventListener('load', function() {
-    // Simulate loading status
-    setTimeout(() => {
-        document.getElementById('statusIndicator').textContent = 'Active';
-        document.getElementById('generationInfo').textContent = 'Last generation: 2 hours ago • Next: in 6 hours';
-    }, 1000);
+    toggleScheduleOptions(document.querySelector('select[name="schedule_frequency"]').value);
 });
 </script>
 {% endblock %}
