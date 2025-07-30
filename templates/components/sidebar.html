@@ -1,0 +1,53 @@
+<aside class="sidebar">
+    <!-- Newsletter -->
+    <div class="sidebar-widget newsletter-widget fade-in">
+        <h3 class="sidebar-title">
+            <i class="fas fa-envelope"></i>
+            Get the Daily Brief
+        </h3>
+        <p style="margin-bottom: 24px; color: var(--text-secondary); font-family: var(--font-secondary); font-size: 16px; line-height: 1.5;">
+            Essential blockchain insights delivered to your inbox every morning. Join 50,000+ readers.
+        </p>
+        <form class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+            <button type="submit" class="newsletter-btn">Subscribe Free</button>
+        </form>
+    </div>
+
+    <!-- Categories -->
+    {% if categories %}
+    <div class="sidebar-widget fade-in">
+        <h3 class="sidebar-title">
+            <i class="fas fa-tags"></i>
+            Categories
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for category in categories %}
+            <a href="{{ url_for('index', category=category.slug) }}" 
+               style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; text-decoration: none; color: var(--text-secondary); border-bottom: 1px solid var(--border-light); transition: color 0.2s ease;">
+                <span style="font-weight: 500;">{{ category.name }}</span>
+                <span style="background: {{ category.color }}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">{{ category.posts|length }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Trending -->
+    <div class="sidebar-widget fade-in">
+        <h3 class="sidebar-title">
+            <i class="fas fa-fire"></i>
+            Popular Posts
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            {% for post in popular_posts[:3] %}
+            <div style="padding: 16px 0; border-bottom: 1px solid var(--border-light);">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+                    <a href="{{ url_for('post_detail', slug=post.slug) }}" style="text-decoration: none; color: inherit;">{{ post.title }}</a>
+                </h4>
+                <div style="font-size: 14px; color: var(--text-secondary);">{{ post.views }} views • {{ post.created_at.strftime('%b %d') }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</aside>

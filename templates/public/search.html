@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Search - Blockchain Latest News{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Search Articles</h1>
+    
+    <form method="GET" action="{{ url_for('search') }}">
+        <input type="text" name="q" placeholder="Search blockchain news..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if query %}
+    <h2>Search Results for "{{ query }}"</h2>
+    {% endif %}
+
+    {% if posts %}
+        {% for post in posts %}
+        <article>
+            <h3><a href="{{ url_for('post_detail', slug=post.slug) }}">{{ post.title }}</a></h3>
+            <p>{{ post.excerpt or post.content[:150] }}...</p>
+            <div class="meta">
+                <span>{{ post.created_at.strftime('%B %d, %Y') }}</span>
+                <span>{{ post.views }} views</span>
+                {% if post.category %}
+                <span class="category">{{ post.category.name }}</span>
+                {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    {% elif query %}
+    <p>No articles found for "{{ query }}". Try different keywords.</p>
+    {% endif %}
+</div>
+{% endblock %}

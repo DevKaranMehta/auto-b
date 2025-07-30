@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if post %}Edit Post{% else %}Create New Post{% endif %} - Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            background: #f5f7fa; color: #333;
+        }
+
+        .admin-topbar {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            padding: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .topbar-container {
+            max-width: 1400px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 60px;
+        }
+
+        .admin-logo { font-size: 1.4em; font-weight: bold; color: #F0B90B; }
+
+        .admin-nav { display: flex; align-items: center; gap: 30px; }
+
+        .nav-item {
+            color: white; text-decoration: none; padding: 8px 16px;
+            border-radius: 6px; transition: all 0.3s; font-weight: 500;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(240, 185, 11, 0.2); color: #F0B90B;
+        }
+
+        .main-content {
+            max-width: 1000px; margin: 0 auto; padding: 30px 20px;
+        }
+
+        .page-header { margin-bottom: 30px; }
+
+        .page-title {
+            font-size: 2.2em; font-weight: 700; color: #1a1a1a; margin-bottom: 8px;
+        }
+
+        .editor-container {
+            background: white; border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .editor-header {
+            padding: 25px 30px; border-bottom: 1px solid #f0f0f0;
+            background: #fafbfc;
+        }
+
+        .editor-form { padding: 30px; }
+
+        .form-group { margin-bottom: 25px; }
+
+        .form-label {
+            display: block; margin-bottom: 8px; font-weight: 600;
+            color: #333; font-size: 1em;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%; padding: 15px; border: 2px solid #e9ecef;
+            border-radius: 10px; font-size: 1em; font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none; border-color: #F0B90B;
+            box-shadow: 0 0 0 3px rgba(240, 185, 11, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px; resize: vertical;
+        }
+
+        .content-editor {
+            min-height: 400px; font-family: Georgia, serif;
+            line-height: 1.6;
+        }
+
+        .form-grid {
+            display: grid; grid-template-columns: 1fr 200px; gap: 20px;
+            align-items: end;
+        }
+
+        .checkbox-group {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px; height: 18px; accent-color: #F0B90B;
+        }
+
+        .form-actions {
+            padding: 25px 30px; background: #fafbfc;
+            border-top: 1px solid #f0f0f0;
+            display: flex; gap: 15px; justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 12px 24px; border-radius: 8px; text-decoration: none;
+            font-weight: 600; transition: all 0.3s; border: none;
+            cursor: pointer; font-size: 1em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #F0B90B, #FF9500);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d; color: white;
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+
+        .help-text {
+            font-size: 0.9em; color: #666; margin-top: 5px;
+        }
+
+        .editor-toolbar {
+            padding: 15px 20px; background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex; gap: 10px; flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px; border: 1px solid #ddd; background: white;
+            border-radius: 6px; cursor: pointer; font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .toolbar-btn:hover {
+            background: #F0B90B; color: white; border-color: #F0B90B;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .main-content { padding: 20px 15px; }
+            .editor-form { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="admin-topbar">
+        <div class="topbar-container">
+            <div class="admin-logo">🚀 Blockchain News Admin</div>
+            <div class="admin-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-item">Dashboard</a>
+                <a href="{{ url_for('admin_posts') }}" class="nav-item">Posts</a>
+                <a href="{{ url_for('admin_new_post') }}" class="nav-item active">New Post</a>
+                <a href="{{ url_for('index') }}" class="nav-item" target="_blank">View Site</a>
+            </div>
+            <div style="color: white;">
+                <a href="{{ url_for('admin_logout') }}" style="color: #ccc;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">{% if post %}Edit Post{% else %}Create New Post{% endif %}</h1>
+            <p style="color: #666;">{% if post %}Update your blockchain article{% else %}Write engaging content for your readers{% endif %}</p>
+        </div>
+
+        <div class="editor-container">
+            <div class="editor-header">
+                <h3>{% if post %}{{ post.title }}{% else %}New Article{% endif %}</h3>
+            </div>
+
+            <form method="POST" class="editor-form">
+                <div class="form-group">
+                    <label class="form-label">Article Title</label>
+                    <input type="text" name="title" class="form-input" 
+                           value="{{ post.title if post else '' }}" 
+                           placeholder="Enter an engaging title for your blockchain article..." required>
+                    <div class="help-text">Make it compelling and SEO-friendly (recommended: 50-60 characters)</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Article Excerpt</label>
+                    <textarea name="excerpt" class="form-textarea" 
+                              placeholder="Write a brief summary that will appear in article previews...">{{ post.excerpt if post else '' }}</textarea>
+                    <div class="help-text">Brief description for social media and article previews (recommended: 150-160 characters)</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Article Content</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" onclick="insertText('**', '**')"><strong>B</strong></button>
+                        <button type="button" class="toolbar-btn" onclick="insertText('*', '*')"><em>I</em></button>
+                        <button type="button" class="toolbar-btn" onclick="insertText('### ', '')">H3</button>
+                        <button type="button" class="toolbar-btn" onclick="insertText('- ', '')">List</button>
+                        <button type="button" class="toolbar-btn" onclick="insertText('[Link](', ')')">🔗</button>
+                        <button type="button" class="toolbar-btn" onclick="insertHTML('<p><strong>Key Points:</strong></p><ul><li></li><li></li></ul>')">📝</button>
+                    </div>
+                    <textarea name="content" class="form-textarea content-editor" 
+                              placeholder="Write your comprehensive blockchain article here... You can use HTML tags for formatting.">{{ post.content if post else '' }}</textarea>
+                    <div class="help-text">Use HTML for rich formatting. Include headings, lists, and emphasis for better readability.</div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select name="category_id" class="form-select">
+                            <option value="">Select Category</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" 
+                                    {% if post and post.category_id == category.id %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Options</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="is_published" id="is_published" 
+                                       {% if not post or post.is_published %}checked{% endif %}>
+                                <label for="is_published">Published</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="is_featured" id="is_featured"
+                                       {% if post and post.is_featured %}checked{% endif %}>
+                                <label for="is_featured">Featured</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        {% if post %}Update Post{% else %}Publish Post{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function insertText(before, after) {
+            const textarea = document.querySelector('.content-editor');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            const beforeText = textarea.value.substring(0, start);
+            const afterText = textarea.value.substring(end);
+            
+            textarea.value = beforeText + before + selectedText + after + afterText;
+            textarea.focus();
+            textarea.setSelectionRange(start + before.length, end + before.length);
+        }
+
+        function insertHTML(html) {
+            const textarea = document.querySelector('.content-editor');
+            const start = textarea.selectionStart;
+            const beforeText = textarea.value.substring(0, start);
+            const afterText = textarea.value.substring(start);
+            
+            textarea.value = beforeText + html + afterText;
+            textarea.focus();
+            textarea.setSelectionRange(start + html.length, start + html.length);
+        }
+
+        // Auto-save functionality
+        let autoSaveTimer;
+        const contentEditor = document.querySelector('.content-editor');
+        
+        contentEditor.addEventListener('input', function() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                console.log('Auto-saving draft...');
+                // Implement auto-save logic here
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

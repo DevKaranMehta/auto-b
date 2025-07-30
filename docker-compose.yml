@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: blockchain_news
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secure_password_123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  blockchain-news:
+    build: .
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=blockchain_news
+      - DB_USER=admin
+      - DB_PASSWORD=secure_password_123
+      - SECRET_KEY=your-super-secret-key-here
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_data:

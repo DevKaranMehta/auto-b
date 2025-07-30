@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - Blockchain Latest News{% endblock %}
+
+{% block content %}
+<div style="min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 48px 24px;">
+    <div style="text-align: center; max-width: 600px;">
+        <div style="font-size: 120px; font-weight: 700; color: var(--primary-yellow); margin-bottom: 24px; font-family: var(--font-secondary);">
+            404
+        </div>
+        
+        <h1 style="font-size: 2.5rem; color: var(--text-primary); margin-bottom: 24px; font-family: var(--font-primary);">
+            Page Not Found
+        </h1>
+        
+        <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 48px; line-height: 1.6;">
+            The page you're looking for seems to have moved or doesn't exist. Don't worry, the blockchain revolution continues!
+        </p>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px; align-items: center;">
+            <a href="{{ url_for('index') }}" class="btn btn-primary" style="padding: 16px 32px; font-size: 18px; text-decoration: none;">
+                <i class="fas fa-home"></i> Back to Homepage
+            </a>
+            
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+                <a href="{{ url_for('search') }}" style="color: var(--primary-yellow); text-decoration: none; font-family: var(--font-secondary); font-weight: 500;">
+                    <i class="fas fa-search"></i> Search Articles
+                </a>
+                <a href="{{ url_for('index', category='defi') }}" style="color: var(--primary-yellow); text-decoration: none; font-family: var(--font-secondary); font-weight: 500;">
+                    <i class="fas fa-coins"></i> DeFi News
+                </a>
+                <a href="{{ url_for('index', category='enterprise') }}" style="color: var(--primary-yellow); text-decoration: none; font-family: var(--font-secondary); font-weight: 500;">
+                    <i class="fas fa-building"></i> Enterprise
+                </a>
+            </div>
+        </div>
+        
+        <!-- Animated blockchain network -->
+        <div style="margin-top: 64px; opacity: 0.3;">
+            <svg width="300" height="100" viewBox="0 0 300 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="8" fill="var(--primary-yellow)" opacity="0.6">
+                    <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="150" cy="30" r="6" fill="var(--bitcoin-orange)" opacity="0.7">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="150" cy="70" r="6" fill="var(--bitcoin-orange)" opacity="0.7">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="250" cy="50" r="8" fill="var(--primary-yellow)" opacity="0.6">
+                    <animate attributeName="opacity" values="0.6;1;0.6" dur="2.2s" repeatCount="indefinite"/>
+                </circle>
+                <line x1="50" y1="50" x2="150" y2="30" stroke="var(--primary-yellow)" stroke-width="2" opacity="0.4">
+                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite"/>
+                </line>
+                <line x1="50" y1="50" x2="150" y2="70" stroke="var(--primary-yellow)" stroke-width="2" opacity="0.4">
+                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2.5s" repeatCount="indefinite"/>
+                </line>
+                <line x1="150" y1="30" x2="250" y2="50" stroke="var(--bitcoin-orange)" stroke-width="2" opacity="0.4">
+                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2.8s" repeatCount="indefinite"/>
+                </line>
+                <line x1="150" y1="70" x2="250" y2="50" stroke="var(--bitcoin-orange)" stroke-width="2" opacity="0.4">
+                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2.1s" repeatCount="indefinite"/>
+                </line>
+            </svg>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Blockchain Latest News{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('index') }}">Blockchain Latest News</a>
+            <div>
+                <a href="{{ url_for('index') }}">Latest</a>
+                <a href="{{ url_for('index', category='defi') }}">DeFi</a>
+                <a href="{{ url_for('index', category='enterprise') }}">Enterprise</a>
+                <a href="{{ url_for('index', category='regulation') }}">Regulation</a>
+                <a href="{{ url_for('search') }}">Search</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Blockchain Latest News. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

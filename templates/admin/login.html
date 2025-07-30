@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Blockchain News</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+        }
+        
+        .login-container {
+            background: white; padding: 50px; border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); max-width: 450px; width: 100%;
+        }
+        
+        .login-logo { 
+            font-size: 3em; color: #F0B90B; margin-bottom: 15px; text-align: center;
+        }
+        
+        .login-title { 
+            color: #333; font-size: 1.8em; font-weight: 700; margin-bottom: 30px; text-align: center;
+        }
+        
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 1em;
+        }
+        
+        .login-btn {
+            width: 100%; background: linear-gradient(135deg, #F0B90B, #FF9500);
+            color: white; border: none; padding: 15px; border-radius: 10px;
+            font-size: 1.1em; font-weight: 600; cursor: pointer;
+        }
+        
+        .demo-credentials {
+            background: #f8f9fa; padding: 20px; border-radius: 10px;
+            margin-bottom: 20px; border-left: 4px solid #F0B90B;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-logo">🚀</div>
+        <h1 class="login-title">Admin Portal</h1>
+        
+        <div class="demo-credentials">
+            <h4>🔑 Admin Access</h4>
+            <p><strong>Username:</strong> admin</p>
+            <p><strong>Password:</strong> blockchain2024</p>
+        </div>
+
+        <form method="POST">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" required value="admin">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="login-btn">🔓 Access Dashboard</button>
+        </form>
+    </div>
+</body>
+</html>

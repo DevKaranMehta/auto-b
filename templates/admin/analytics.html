@@ -1,0 +1,174 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="admin-card">
+    <h2 style="margin-bottom: 32px; color: var(--text-primary);">
+        <i class="fas fa-chart-bar"></i> Analytics Dashboard
+    </h2>
+
+    <!-- Main Stats -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 48px;">
+        <div class="stat-card">
+            <div class="stat-number">{{ total_pageviews }}</div>
+            <div class="stat-label">Page Views (30 days)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ newsletter_signups }}</div>
+            <div class="stat-label">Newsletter Signups (30 days)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ popular_posts|length }}</div>
+            <div class="stat-label">Published Articles</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ ((newsletter_signups / total_pageviews * 100)|round|int) if total_pageviews > 0 else 0 }}%</div>
+            <div class="stat-label">Conversion Rate</div>
+        </div>
+    </div>
+
+    <!-- Popular Posts -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        <div>
+            <h3 style="margin-bottom: 24px; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-fire" style="color: var(--primary-yellow);"></i>
+                Most Popular Posts
+            </h3>
+            {% if popular_posts %}
+            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 24px;">
+                {% for post in popular_posts %}
+                <div style="display: flex; justify-content: space-between; align-items: start; padding: 16px 0; {% if not loop.last %}border-bottom: 1px solid var(--border-light);{% endif %}">
+                    <div style="flex: 1;">
+                        <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+                            {{ post[0][:60] }}{% if post[0]|length > 60 %}...{% endif %}
+                        </h4>
+                        <div style="font-size: 14px; color: var(--text-secondary);">
+                            <i class="fas fa-eye"></i> {{ post[1] }} views
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin-left: 16px;">
+                        <div style="font-size: 20px; font-weight: 700; color: var(--primary-yellow);">{{ loop.index }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div style="text-align: center; padding: 48px; color: var(--text-secondary); background: var(--bg-secondary); border-radius: 8px;">
+                <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 16px;"></i>
+                <p>No analytics data available yet</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Quick Actions -->
+        <div>
+            <h3 style="margin-bottom: 24px; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-tools" style="color: var(--primary-yellow);"></i>
+                Quick Actions
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div style="background: var(--bg-secondary); padding: 24px; border-radius: 8px;">
+                    <h4 style="margin-bottom: 16px; color: var(--text-primary);">
+                        <i class="fas fa-plus-circle" style="color: var(--primary-yellow);"></i>
+                        Content Creation
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <a href="{{ url_for('admin_new_post') }}" class="btn btn-primary" style="width: 100%; text-align: center;">
+                            <i class="fas fa-edit"></i> Create New Post
+                        </a>
+                        <a href="{{ url_for('admin_new_category') }}" class="btn" style="width: 100%; text-align: center; background: var(--bitcoin-orange); color: white;">
+                            <i class="fas fa-tag"></i> Add Category
+                        </a>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-secondary); padding: 24px; border-radius: 8px;">
+                    <h4 style="margin-bottom: 16px; color: var(--text-primary);">
+                        <i class="fas fa-cog" style="color: var(--primary-yellow);"></i>
+                        Site Management
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button class="btn" style="width: 100%; background: var(--binance-dark); color: white;" onclick="clearCache()">
+                            <i class="fas fa-broom"></i> Clear Cache
+                        </button>
+                        <button class="btn" style="width: 100%; background: var(--binance-gray); color: white;" onclick="backupData()">
+                            <i class="fas fa-download"></i> Backup Data
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-yellow-light); padding: 24px; border-radius: 8px; border: 1px solid var(--primary-yellow);">
+                    <h4 style="margin-bottom: 16px; color: var(--dark-yellow);">
+                        <i class="fas fa-lightbulb" style="color: var(--primary-yellow);"></i>
+                        Pro Tips
+                    </h4>
+                    <ul style="list-style: none; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                        <li style="margin-bottom: 8px;">
+                            <i class="fas fa-check" style="color: var(--primary-yellow); margin-right: 8px;"></i>
+                            Publish consistently for better engagement
+                        </li>
+                        <li style="margin-bottom: 8px;">
+                            <i class="fas fa-check" style="color: var(--primary-yellow); margin-right: 8px;"></i>
+                            Use featured posts to highlight important content
+                        </li>
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary-yellow); margin-right: 8px;"></i>
+                            Monitor analytics to understand your audience
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information -->
+    <div style="margin-top: 48px; padding: 24px; background: var(--bg-secondary); border-radius: 8px;">
+        <h3 style="margin-bottom: 24px; color: var(--text-primary);">
+            <i class="fas fa-server"></i> System Information
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+            <div>
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Platform</div>
+                <div style="color: var(--text-secondary);">Flask + PostgreSQL</div>
+            </div>
+            <div>
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Database Status</div>
+                <div style="color: #10B981;">
+                    <i class="fas fa-check-circle"></i> Connected
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Last Backup</div>
+                <div style="color: var(--text-secondary);">{{ moment().format('MMM DD, YYYY') if moment else 'N/A' }}</div>
+            </div>
+            <div>
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Version</div>
+                <div style="color: var(--text-secondary);">v1.0.0</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function clearCache() {
+    if (confirm('Are you sure you want to clear the cache? This may temporarily slow down the website.')) {
+        alert('Cache clearing functionality will be implemented with Redis integration.');
+    }
+}
+
+function backupData() {
+    if (confirm('Create a backup of all posts, categories, and subscriber data?')) {
+        alert('Database backup functionality will be implemented with automated backup system.');
+    }
+}
+
+// Simple chart for pageviews (placeholder)
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Analytics dashboard loaded');
+    
+    // You can integrate Chart.js or other charting library here
+    // Example: Create trending charts, visitor analytics, etc.
+});
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+<header class="header">
+    <div class="header-container">
+        <a href="{{ url_for('index') }}" class="logo">
+            <div class="logo-icon">
+                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1E2329;stop-opacity:1"></stop>
+                            <stop offset="100%" style="stop-color:#2B3139;stop-opacity:1"></stop>
+                        </linearGradient>
+                    </defs>
+                    <rect width="50" height="50" rx="8" fill="url(#mainGrad)"></rect>
+                    <circle cx="25" cy="25" r="3" fill="#F0B90B"></circle>
+                    <circle cx="15" cy="15" r="2.2" fill="#FF9500" opacity="0.9"></circle>
+                    <circle cx="35" cy="15" r="2.2" fill="#FF9500" opacity="0.9"></circle>
+                    <circle cx="15" cy="35" r="2.2" fill="#FF9500" opacity="0.9"></circle>
+                    <circle cx="35" cy="35" r="2.2" fill="#FF9500" opacity="0.9"></circle>
+                    <circle cx="8" cy="25" r="1.8" fill="#F0B90B" opacity="0.7"></circle>
+                    <circle cx="42" cy="25" r="1.8" fill="#F0B90B" opacity="0.7"></circle>
+                    <circle cx="25" cy="8" r="1.8" fill="#F0B90B" opacity="0.7"></circle>
+                    <circle cx="25" cy="42" r="1.8" fill="#F0B90B" opacity="0.7"></circle>
+                    <line x1="25" y1="25" x2="15" y2="15" stroke="#F0B90B" stroke-width="1.5" opacity="0.8"></line>
+                    <line x1="25" y1="25" x2="35" y2="15" stroke="#F0B90B" stroke-width="1.5" opacity="0.8"></line>
+                    <line x1="25" y1="25" x2="15" y2="35" stroke="#F0B90B" stroke-width="1.5" opacity="0.8"></line>
+                    <line x1="25" y1="25" x2="35" y2="35" stroke="#F0B90B" stroke-width="1.5" opacity="0.8"></line>
+                    <line x1="25" y1="25" x2="8" y2="25" stroke="#F0B90B" stroke-width="1.2" opacity="0.6"></line>
+                    <line x1="25" y1="25" x2="42" y2="25" stroke="#F0B90B" stroke-width="1.2" opacity="0.6"></line>
+                    <line x1="25" y1="25" x2="25" y2="8" stroke="#F0B90B" stroke-width="1.2" opacity="0.6"></line>
+                    <line x1="25" y1="25" x2="25" y2="42" stroke="#F0B90B" stroke-width="1.2" opacity="0.6"></line>
+                </svg>
+            </div>
+            <div class="logo-text">
+                <div class="logo-main">BLOCKCHAIN</div>
+                <div class="logo-sub">Latest News</div>
+            </div>
+        </a>
+        
+        <nav class="nav-container">
+            <ul class="main-nav">
+                <li><a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Latest</a></li>
+                <li><a href="{{ url_for('index', category='defi') }}" class="nav-link {% if request.args.get('category') == 'defi' %}active{% endif %}">DeFi</a></li>
+                <li><a href="{{ url_for('index', category='enterprise') }}" class="nav-link {% if request.args.get('category') == 'enterprise' %}active{% endif %}">Enterprise</a></li>
+                <li><a href="{{ url_for('index', category='regulation') }}" class="nav-link {% if request.args.get('category') == 'regulation' %}active{% endif %}">Regulation</a></li>
+                <li><a href="{{ url_for('search') }}" class="nav-link">Search</a></li>
+            </ul>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </div>
+</header>

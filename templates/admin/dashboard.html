@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Blockchain News</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; margin: 0; }
+        .admin-header { background: linear-gradient(135deg, #1a1a1a, #2d2d2d); color: white; padding: 1rem 0; }
+        .nav { max-width: 1400px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .admin-logo { font-size: 1.4em; font-weight: bold; color: #F0B90B; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; }
+        .nav-links a:hover { background: rgba(240, 185, 11, 0.2); color: #F0B90B; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
+        .page-title { font-size: 2.2em; font-weight: 700; margin-bottom: 30px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .stat-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; }
+        .stat-number { font-size: 2.5em; font-weight: 800; color: #F0B90B; }
+        .stat-label { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+        .card-header { padding: 25px 30px; border-bottom: 1px solid #f0f0f0; background: #fafbfc; }
+        .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; }
+        .action-btn { display: flex; flex-direction: column; align-items: center; padding: 25px 20px; border-radius: 12px; text-decoration: none; transition: all 0.3s; }
+        .action-btn.primary { background: linear-gradient(135deg, #F0B90B, #FF9500); color: white; }
+        .action-btn.secondary { background: #f8f9fa; color: #333; }
+        .action-icon { font-size: 2em; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <nav class="nav">
+            <div class="admin-logo">🚀 Blockchain News Admin</div>
+            <div class="nav-links">
+                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a href="#posts">Posts</a>
+                <a href="#settings">Settings</a>
+                <a href="{{ url_for('index') }}" target="_blank">View Site</a>
+                <a href="{{ url_for('admin_logout') }}">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Dashboard Overview</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_posts }}</div>
+                <div class="stat-label">Total Posts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_categories }}</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_subscribers }}</div>
+                <div class="stat-label">Subscribers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Updates</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Quick Actions</h3>
+            </div>
+            <div class="actions-grid">
+                <a href="#new-post" class="action-btn primary">
+                    <div class="action-icon">✏️</div>
+                    <div>Create New Post</div>
+                </a>
+                <a href="#ai-scheduler" class="action-btn secondary">
+                    <div class="action-icon">🤖</div>
+                    <div>AI Scheduler</div>
+                </a>
+                <a href="#topics" class="action-btn secondary">
+                    <div class="action-icon">📂</div>
+                    <div>Manage Topics</div>
+                </a>
+                <a href="{{ url_for('index') }}" target="_blank" class="action-btn secondary">
+                    <div class="action-icon">🌐</div>
+                    <div>View Website</div>
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

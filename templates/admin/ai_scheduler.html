@@ -1,0 +1,194 @@
+{% extends "admin/base.html" %}
+
+{% block title %}AI Content Scheduler{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">AI Content Scheduler</h1>
+            <p class="page-subtitle">Automatically generate blockchain news content from your topics</p>
+        </div>
+        <button onclick="generateAIPosts()" class="btn btn-primary" id="generateBtn">
+            🤖 Generate AI Posts
+        </button>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+    <!-- AI Generation Settings -->
+    <div class="card">
+        <div class="card-header">
+            <h3>AI Generation Settings</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label class="form-label">Generation Frequency</label>
+                <select class="form-select">
+                    <option>Daily</option>
+                    <option selected>Weekly</option>
+                    <option>Bi-weekly</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Posts per Generation</label>
+                <input type="number" class="form-input" value="3" min="1" max="10">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Content Quality</label>
+                <select class="form-select">
+                    <option>Standard</option>
+                    <option selected>High Quality</option>
+                    <option>Premium</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Auto-publish</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="auto_publish" checked>
+                    <label for="auto_publish">Automatically publish generated content</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generation Statistics -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Generation Statistics</h3>
+        </div>
+        <div class="card-body">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <div style="font-size: 2em; font-weight: bold; color: #F0B90B;">{{ recent_ai_posts|length }}</div>
+                    <div style="color: #666;">Posts This Week</div>
+                </div>
+                <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <div style="font-size: 2em; font-weight: bold; color: #28a745;">{{ topics|length }}</div>
+                    <div style="color: #666;">Active Topics</div>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <div style="color: #666; font-size: 0.9em;">
+                    <p>✅ Last generation: 2 hours ago</p>
+                    <p>⏰ Next scheduled: Tomorrow at 9:00 AM</p>
+                    <p>🎯 Success rate: 95%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Topics Management -->
+<div class="card">
+    <div class="card-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Content Topics ({{ topics|length }})</h3>
+            <a href="{{ url_for('admin_topics') }}" class="btn btn-secondary">Manage Topics</a>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if topics %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            {% for topic in topics %}
+            <div style="border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                <h4 style="margin-bottom: 10px; color: #333;">{{ topic.name }}</h4>
+                <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">
+                    Category: {{ topic.category_name or 'None' }}
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.85em; color: {% if topic.is_active %}#28a745{% else %}#dc3545{% endif %};">
+                        {{ '✅ Active' if topic.is_active else '❌ Inactive' }}
+                    </span>
+                    <button class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8em;" onclick="generateForTopic({{ topic.id }})">
+                        Generate Now
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 40px; color: #666;">
+            <div style="font-size: 3em; margin-bottom: 20px;">📝</div>
+            <h3>No topics configured</h3>
+            <p>Add topics to start generating AI content automatically.</p>
+            <a href="{{ url_for('admin_topics') }}" class="btn btn-primary" style="margin-top: 20px;">Add Topics</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Recent AI Posts -->
+{% if recent_ai_posts %}
+<div class="card" style="margin-top: 30px;">
+    <div class="card-header">
+        <h3>Recent AI Generated Posts</h3>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Post Title</th>
+                    <th>Topic</th>
+                    <th>Generated</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ai_post in recent_ai_posts %}
+                <tr>
+                    <td>{{ ai_post.title or 'AI Generated Post' }}</td>
+                    <td>{{ ai_post.topic_name or 'Unknown' }}</td>
+                    <td>{{ ai_post.generated_at.strftime('%m/%d/%Y %I:%M %p') }}</td>
+                    <td>
+                        <span style="background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 0.8em;">
+                            Published
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<script>
+function generateAIPosts() {
+    const btn = document.getElementById('generateBtn');
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '🔄 Generating...';
+    btn.disabled = true;
+    
+    fetch('/admin/ai-scheduler/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ ' + data.message);
+            location.reload();
+        } else {
+            alert('❌ ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('❌ Error generating posts');
+    })
+    .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    });
+}
+
+function generateForTopic(topicId) {
+    alert('Generating content for topic ID: ' + topicId);
+    // Implement single topic generation
+}
+</script>
+{% endblock %}

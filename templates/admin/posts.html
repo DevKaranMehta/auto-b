@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Posts - Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            background: #f5f7fa; color: #333;
+        }
+
+        .admin-topbar {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            padding: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .topbar-container {
+            max-width: 1400px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 60px;
+        }
+
+        .admin-logo {
+            font-size: 1.4em; font-weight: bold; color: #F0B90B;
+        }
+
+        .admin-nav {
+            display: flex; align-items: center; gap: 30px;
+        }
+
+        .nav-item {
+            color: white; text-decoration: none; padding: 8px 16px;
+            border-radius: 6px; transition: all 0.3s; font-weight: 500;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(240, 185, 11, 0.2); color: #F0B90B;
+        }
+
+        .main-content {
+            max-width: 1400px; margin: 0 auto; padding: 30px 20px;
+        }
+
+        .page-header {
+            display: flex; justify-content: between; align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 2.2em; font-weight: 700; color: #1a1a1a;
+        }
+
+        .btn {
+            padding: 12px 24px; border-radius: 8px; text-decoration: none;
+            font-weight: 600; transition: all 0.3s; border: none;
+            cursor: pointer; display: inline-flex; align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #F0B90B, #FF9500);
+            color: white;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); }
+
+        .posts-container {
+            background: white; border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .posts-header {
+            padding: 25px 30px; border-bottom: 1px solid #f0f0f0;
+            background: #fafbfc; display: flex; justify-content: space-between;
+            align-items: center;
+        }
+
+        .posts-table {
+            width: 100%; border-collapse: collapse;
+        }
+
+        .posts-table th {
+            background: #f8f9fa; padding: 15px 20px; text-align: left;
+            font-weight: 600; color: #333; border-bottom: 1px solid #e9ecef;
+        }
+
+        .posts-table td {
+            padding: 15px 20px; border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        .posts-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .post-title {
+            font-weight: 600; color: #1a1a1a; margin-bottom: 4px;
+        }
+
+        .post-meta {
+            font-size: 0.9em; color: #666;
+        }
+
+        .status-badge {
+            padding: 4px 12px; border-radius: 12px; font-size: 0.8em;
+            font-weight: 600; text-transform: uppercase;
+        }
+
+        .status-published { background: #d4edda; color: #155724; }
+        .status-draft { background: #fff3cd; color: #856404; }
+        .status-featured { background: #cce5ff; color: #004085; }
+
+        .actions {
+            display: flex; gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 12px; border-radius: 6px; text-decoration: none;
+            font-size: 0.85em; font-weight: 500; transition: all 0.3s;
+        }
+
+        .action-view { background: #e3f2fd; color: #1976d2; }
+        .action-edit { background: #f3e5f5; color: #7b1fa2; }
+        .action-delete { background: #ffebee; color: #c62828; }
+
+        .action-btn:hover { transform: translateY(-1px); }
+
+        .empty-state {
+            text-align: center; padding: 60px 20px; color: #666;
+        }
+
+        .empty-icon {
+            font-size: 4em; margin-bottom: 20px; opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <nav class="admin-topbar">
+        <div class="topbar-container">
+            <div class="admin-logo">🚀 Blockchain News Admin</div>
+            <div class="admin-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-item">Dashboard</a>
+                <a href="{{ url_for('admin_posts') }}" class="nav-item active">Posts</a>
+                <a href="{{ url_for('admin_new_post') }}" class="nav-item">New Post</a>
+                <a href="#" class="nav-item">Categories</a>
+                <a href="{{ url_for('index') }}" class="nav-item" target="_blank">View Site</a>
+            </div>
+            <div style="color: white;">
+                <a href="{{ url_for('admin_logout') }}" style="color: #ccc;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Manage Posts</h1>
+                <p style="color: #666; margin-top: 8px;">Create, edit, and manage your blockchain articles</p>
+            </div>
+            <a href="{{ url_for('admin_new_post') }}" class="btn btn-primary">
+                ✏️ Create New Post
+            </a>
+        </div>
+
+        <div class="posts-container">
+            {% if posts %}
+            <div class="posts-header">
+                <h3>All Posts ({{ posts|length }})</h3>
+                <div style="font-size: 0.9em; color: #666;">
+                    Manage your published articles and drafts
+                </div>
+            </div>
+
+            <table class="posts-table">
+                <thead>
+                    <tr>
+                        <th>Title & Details</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Stats</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>
+                            <div class="post-title">{{ post.title[:60] }}{% if post.title|length > 60 %}...{% endif %}</div>
+                            <div class="post-meta">By {{ post.author or 'Admin' }}</div>
+                        </td>
+                        <td>
+                            {% if post.category_name %}
+                            <span class="status-badge" style="background: #e8f5e8; color: #2e7d32;">
+                                {{ post.category_name }}
+                            </span>
+                            {% else %}
+                            <span style="color: #999;">No category</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div>
+                                {% if post.is_published %}
+                                <span class="status-badge status-published">Published</span>
+                                {% else %}
+                                <span class="status-badge status-draft">Draft</span>
+                                {% endif %}
+                            </div>
+                            {% if post.is_featured %}
+                            <div style="margin-top: 4px;">
+                                <span class="status-badge status-featured">Featured</span>
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div style="font-weight: 600;">{{ post.views or 0 }} views</div>
+                            <div style="font-size: 0.85em; color: #666;">{{ post.created_at.strftime('%b %d, %Y') }}</div>
+                        </td>
+                        <td>
+                            <div>{{ post.created_at.strftime('%m/%d/%Y') }}</div>
+                            <div style="font-size: 0.85em; color: #666;">{{ post.created_at.strftime('%I:%M %p') }}</div>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a href="{{ url_for('post_detail', slug=post.slug) }}" target="_blank" class="action-btn action-view">View</a>
+                                <a href="{{ url_for('admin_edit_post', id=post.id) }}" class="action-btn action-edit">Edit</a>
+                                <form method="POST" action="{{ url_for('admin_delete_post', id=post.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this post?')">
+                                    <button type="submit" class="action-btn action-delete" style="border: none; cursor: pointer;">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📝</div>
+                <h3>No posts yet</h3>
+                <p>Start creating engaging blockchain content for your readers.</p>
+                <div style="margin-top: 20px;">
+                    <a href="{{ url_for('admin_new_post') }}" class="btn btn-primary">Create Your First Post</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

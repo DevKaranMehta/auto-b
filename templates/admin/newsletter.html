@@ -1,0 +1,197 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="admin-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+        <h2 style="color: var(--text-primary); margin: 0;">
+            <i class="fas fa-envelope"></i> Newsletter Subscribers
+        </h2>
+        <div style="display: flex; gap: 12px;">
+            <button class="btn btn-primary" onclick="exportEmails()">
+                <i class="fas fa-download"></i> Export CSV
+            </button>
+            <button class="btn btn-primary" style="background: var(--bitcoin-orange);" onclick="copyEmails()">
+                <i class="fas fa-copy"></i> Copy Emails
+            </button>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 32px;">
+        <div class="stat-card">
+            <div class="stat-number">{{ subscribers.total }}</div>
+            <div class="stat-label">Total Subscribers</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ subscribers.items|selectattr('subscribed_at')|selectattr('subscribed_at', 'greaterthan', moment().subtract(7, 'days'))|list|length if moment else 'N/A' }}</div>
+            <div class="stat-label">New This Week</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ (subscribers.items|selectattr('is_active')|list|length / subscribers.total * 100)|round|int if subscribers.total > 0 else 0 }}%</div>
+            <div class="stat-label">Active Rate</div>
+        </div>
+    </div>
+
+    {% if subscribers.items %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes()">
+                    </th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Subscribed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subscriber in subscribers.items %}
+                <tr>
+                    <td>
+                        <input type="checkbox" class="subscriber-checkbox" value="{{ subscriber.email }}">
+                    </td>
+                    <td style="font-weight: 500;">{{ subscriber.email }}</td>
+                    <td>
+                        <span style="color: {% if subscriber.is_active %}#10B981{% else %}#F59E0B{% endif %};">
+                            {% if subscriber.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </td>
+                    <td>{{ subscriber.subscribed_at.strftime('%b %d, %Y at %I:%M %p') }}</td>
+                    <td class="actions">
+                        {% if subscriber.is_active %}
+                        <button class="btn" style="padding: 6px 12px; font-size: 12px; background: #F59E0B; color: white;" onclick="toggleSubscriberStatus({{ subscriber.id }}, false)">
+                            Deactivate
+                        </button>
+                        {% else %}
+                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="toggleSubscriberStatus({{ subscriber.id }}, true)">
+                            Reactivate
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if subscribers.pages > 1 %}
+    <div class="pagination" style="margin-top: 32px;">
+        {% if subscribers.has_prev %}
+        <a href="{{ url_for('admin_newsletter', page=subscribers.prev_num) }}">&larr; Previous</a>
+        {% endif %}
+        
+        {% for page_num in subscribers.iter_pages() %}
+            {% if page_num %}
+                {% if page_num != subscribers.page %}
+                <a href="{{ url_for('admin_newsletter', page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                <span class="current">{{ page_num }}</span>
+                {% endif %}
+            {% else %}
+            <span>...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if subscribers.has_next %}
+        <a href="{{ url_for('admin_newsletter', page=subscribers.next_num) }}">Next &rarr;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 32px; padding: 24px; background: var(--bg-yellow-light); border-radius: 8px; border: 1px solid var(--primary-yellow);">
+        <h4 style="color: var(--dark-yellow); margin-bottom: 16px;">
+            <i class="fas fa-paper-plane"></i> Send Newsletter
+        </h4>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Send a test email or newsletter to your subscribers. This feature will be enhanced in future updates.
+        </p>
+        <div style="display: flex; gap: 12px;">
+            <input type="email" placeholder="Test email address" class="form-control" style="flex: 1;" id="testEmail">
+            <button class="btn btn-primary" onclick="sendTestEmail()">Send Test</button>
+        </div>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 64px; color: var(--text-secondary);">
+        <i class="fas fa-envelope-open" style="font-size: 64px; margin-bottom: 24px;"></i>
+        <h3>No subscribers yet</h3>
+        <p>When visitors subscribe to your newsletter, they'll appear here.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleAllCheckboxes() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.subscriber-checkbox');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+    });
+}
+
+function getSelectedEmails() {
+    const checkboxes = document.querySelectorAll('.subscriber-checkbox:checked');
+    return Array.from(checkboxes).map(cb => cb.value);
+}
+
+function exportEmails() {
+    const emails = getSelectedEmails();
+    if (emails.length === 0) {
+        alert('Please select subscribers to export');
+        return;
+    }
+    
+    const csvContent = 'Email,Status,Subscribed Date\n' + 
+                      emails.map(email => `${email},Active,${new Date().toISOString()}`).join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'newsletter_subscribers.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+function copyEmails() {
+    const emails = getSelectedEmails();
+    if (emails.length === 0) {
+        alert('Please select subscribers to copy');
+        return;
+    }
+    
+    navigator.clipboard.writeText(emails.join(', ')).then(() => {
+        alert(`Copied ${emails.length} email addresses to clipboard`);
+    }).catch(() => {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = emails.join(', ');
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert(`Copied ${emails.length} email addresses to clipboard`);
+    });
+}
+
+function sendTestEmail() {
+    const testEmail = document.getElementById('testEmail').value;
+    if (!testEmail) {
+        alert('Please enter a test email address');
+        return;
+    }
+    
+    // This would integrate with your email service
+    alert(`Test email would be sent to: ${testEmail}\n\nEmail service integration coming soon!`);
+}
+
+function toggleSubscriberStatus(id, status) {
+    // This would make an AJAX call to update subscriber status
+    alert(`Subscriber status would be updated to: ${status ? 'Active' : 'Inactive'}\n\nStatus update feature coming soon!`);
+}
+</script>
+{% endblock %}

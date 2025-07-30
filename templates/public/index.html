@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Latest News - Professional Crypto News Platform</title>
+    <meta name="description" content="Professional blockchain and cryptocurrency news platform. Latest insights on DeFi, enterprise adoption, regulation, and market analysis.">
+    <style>
+        :root {
+            --primary-gold: #F0B90B;
+            --secondary-orange: #FF9500;
+            --dark-bg: #1a1a1a;
+            --light-bg: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #666;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6; color: var(--text-dark); background: var(--light-bg);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--dark-bg), #2d2d2d);
+            color: white; padding: 1rem 0; box-shadow: var(--shadow);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        
+        .nav { 
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .logo { 
+            font-size: 1.8em; font-weight: bold; color: var(--primary-gold);
+            text-decoration: none;
+        }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { 
+            color: white; text-decoration: none; transition: all 0.3s;
+            padding: 8px 16px; border-radius: 5px;
+        }
+        .nav-links a:hover { color: var(--primary-gold); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-orange));
+            color: white; padding: 80px 40px; border-radius: 20px;
+            margin-bottom: 50px; text-align: center;
+        }
+
+        .hero h1 { font-size: 3.5em; margin-bottom: 20px; font-weight: 800; }
+        .hero p { font-size: 1.3em; opacity: 0.95; }
+
+        .content { display: grid; grid-template-columns: 2fr 1fr; gap: 50px; }
+        .posts-section h2 { margin-bottom: 30px; color: var(--dark-bg); font-size: 2em; }
+
+        .post-card {
+            background: white; border-radius: 15px; overflow: hidden;
+            box-shadow: var(--shadow); margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover { transform: translateY(-8px); }
+        .post-card.featured { border-left: 6px solid var(--primary-gold); }
+
+        .post-content { padding: 30px; }
+        .post-title { 
+            font-size: 1.5em; font-weight: 700; margin-bottom: 15px; 
+            color: var(--dark-bg);
+        }
+        .post-excerpt { color: var(--text-light); margin-bottom: 20px; }
+
+        .sidebar { display: grid; gap: 30px; }
+        .sidebar-widget {
+            background: white; border-radius: 15px; padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .footer {
+            background: var(--dark-bg); color: white; text-align: center;
+            padding: 50px 0; margin-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5em; }
+            .content { grid-template-columns: 1fr; }
+            .nav { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="{{ url_for('index') }}" class="logo">⚡ Blockchain Latest News</a>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">Latest</a>
+                <a href="#defi">DeFi</a>
+                <a href="#enterprise">Enterprise</a>
+                <a href="#regulation">Regulation</a>
+                <a href="{{ url_for('admin_login') }}">Admin</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Stay Ahead of the Blockchain Revolution</h1>
+            <p>Professional news, insights, and analysis from the world of cryptocurrency and blockchain technology</p>
+        </section>
+
+        <div class="content">
+            <section class="posts-section">
+                <h2>📈 Latest Blockchain News</h2>
+                
+                {% if featured_post %}
+                <article class="post-card featured">
+                    <div class="post-content">
+                        <h3 class="post-title">{{ featured_post.title }}</h3>
+                        <p class="post-excerpt">{{ featured_post.excerpt or featured_post.content[:200] }}...</p>
+                        <div style="color: #666; font-size: 0.9em;">
+                            <span>👁 {{ featured_post.views or 0 }} views</span>
+                        </div>
+                    </div>
+                </article>
+                {% endif %}
+
+                {% for post in posts %}
+                <article class="post-card">
+                    <div class="post-content">
+                        <h3 class="post-title">{{ post.title }}</h3>
+                        <p class="post-excerpt">{{ post.excerpt or post.content[:150] }}...</p>
+                        <div style="color: #666; font-size: 0.9em;">
+                            <span>By {{ post.author }}</span> • 
+                            <span>👁 {{ post.views or 0 }} views</span>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+
+                {% if not posts and not featured_post %}
+                <div style="text-align: center; padding: 60px 20px; color: #666;">
+                    <h3>🚀 Platform Ready!</h3>
+                    <p>Your blockchain news platform is operational.</p>
+                    <p><a href="{{ url_for('admin_login') }}" style="color: var(--primary-gold);">Access Admin Panel</a> to start publishing content.</p>
+                </div>
+                {% endif %}
+            </section>
+
+            <aside class="sidebar">
+                <div class="sidebar-widget">
+                    <h3>📧 Newsletter</h3>
+                    <p style="color: #666; margin-bottom: 20px;">Get the latest blockchain insights delivered to your inbox.</p>
+                    <form style="display: grid; gap: 15px;">
+                        <input type="email" placeholder="Your email address" style="padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px;" required>
+                        <button type="submit" style="background: linear-gradient(135deg, var(--primary-gold), var(--secondary-orange)); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 600; cursor: pointer;">Subscribe Now</button>
+                    </form>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3>📊 Platform Stats</h3>
+                    <div style="color: #666; line-height: 1.8;">
+                        <p>✅ <strong>{{ posts|length + (1 if featured_post else 0) }}</strong> Articles</p>
+                        <p>🏷️ <strong>{{ categories|length if categories else 5 }}</strong> Categories</p>
+                        <p>🔐 <strong>Secure</strong> Admin Panel</p>
+                        <p>📱 <strong>Mobile</strong> Optimized</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Blockchain Latest News. Professional cryptocurrency news platform.</p>
+    </footer>
+</body>
+</html>
