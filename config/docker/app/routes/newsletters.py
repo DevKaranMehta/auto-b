@@ -13,26 +13,48 @@ async def newsletters_page(request: Request, db: Session = Depends(get_db)):
     try:
         # Get newsletter subscription count
         result = db.execute(text("SELECT COUNT(*) as count FROM newsletter_subscriptions WHERE is_active = true"))
-        subscription_count = result.fetchone().count
+        subscription_count = result.fetchone().count if result.fetchone() else 0
         
         # Get recent subscribers
-        result = db.execute(text("SELECT email, created_at FROM newsletter_subscriptions WHERE is_active = true ORDER BY created_at DESC LIMIT 10"))
+        result = db.execute(text("""
+            SELECT email, created_at 
+            FROM newsletter_subscriptions 
+            WHERE is_active = true 
+            ORDER BY created_at DESC 
+            LIMIT 10
+        """))
         recent_subscribers = result.fetchall()
         
         return templates.TemplateResponse("admin/newsletters.html", {
             "request": request,
             "subscription_count": subscription_count,
-            "recent_subscribers": recent_subscribers
+            "recent_subscribers": recent_subscribers,
+            "title": "Newsletter Management"
         })
     except Exception as e:
+        print(f"Newsletter error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Newsletter error: {str(e)}")
 
 @router.post("/newsletter/subscribe")
 async def subscribe_newsletter(email: str = Form(...), db: Session = Depends(get_db)):
     try:
         # Insert new subscriber
-        db.execute(text("INSERT INTO newsletter_subscriptions (email) VALUES (:email) ON CONFLICT (email) DO NOTHING"), {"email": email})
+        db.execute(text("""
+            INSERT INTO newsletter_subscriptions (email) 
+            VALUES (:email) 
+            ON CONFLICT (email) DO NOTHING
+        """), {"email": email})
         db.commit()
         return {"message": "Successfully subscribed to newsletter"}
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=f"Subscription error: {str(e)}")
+
+@router.get("/admin/newsletters/count")
+async def get_newsletter_count(db: Session = Depends(get_db)):
+    try:
+        result = db.execute(text("SELECT COUNT(*) as count FROM newsletter_subscriptions WHERE is_active = true"))
+        count = result.fetchone().count if result.fetchone() else 0
+        return {"count": count}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Count error: {str(e)}")

@@ -1,48 +1,52 @@
-{% extends "admin/base.html" %}
-
-{% block title %}Newsletter Management{% endblock %}
-
-{% block content %}
-<h1 class="text-3xl font-bold mb-8">📧 Newsletter Management</h1>
-
-<div class="bg-white rounded-lg shadow-lg">
-    <div class="p-6 border-b">
-        <h2 class="text-xl font-bold">Subscribers ({{ subscribers|length }})</h2>
-    </div>
-    <div class="p-6">
-        {% if subscribers %}
-        <div class="overflow-x-auto">
-            <table class="w-full table-auto">
-                <thead>
-                    <tr class="bg-gray-50">
-                        <th class="px-4 py-2 text-left">Email</th>
-                        <th class="px-4 py-2 text-left">Status</th>
-                        <th class="px-4 py-2 text-left">Subscribed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for subscriber in subscribers %}
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="px-4 py-2 font-mono">{{ subscriber.email }}</td>
-                        <td class="px-4 py-2">
-                            {% if subscriber.is_active %}
-                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">✅ Active</span>
-                            {% else %}
-                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-sm">❌ Inactive</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-4 py-2">{{ subscriber.subscribed_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Management - Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .header { border-bottom: 1px solid #ddd; padding-bottom: 20px; margin-bottom: 20px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; }
+        .stat-number { font-size: 2em; font-weight: bold; color: #007bff; }
+        .subscribers-list { background: #f8f9fa; padding: 20px; border-radius: 8px; }
+        .subscriber { padding: 10px; border-bottom: 1px solid #ddd; }
+        .back-link { color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📧 Newsletter Management</h1>
+            <p><a href="/admin/" class="back-link">← Back to Admin Dashboard</a></p>
         </div>
-        {% else %}
-        <div class="text-center py-8 text-gray-500">
-            <h3 class="text-lg font-semibold mb-2">No newsletter subscribers yet!</h3>
-            <p>When people subscribe to your newsletter, they'll appear here.</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">{{ subscription_count }}</div>
+                <div>Active Subscribers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ recent_subscribers|length }}</div>
+                <div>Recent Signups</div>
+            </div>
         </div>
-        {% endif %}
+        
+        <div class="subscribers-list">
+            <h3>Recent Subscribers</h3>
+            {% if recent_subscribers %}
+                {% for subscriber in recent_subscribers %}
+                    <div class="subscriber">
+                        <strong>{{ subscriber.email }}</strong>
+                        <span style="float: right; color: #666;">{{ subscriber.created_at.strftime('%Y-%m-%d %H:%M') if subscriber.created_at else 'N/A' }}</span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No subscribers yet.</p>
+            {% endif %}
+        </div>
     </div>
-</div>
-{% endblock %}
+</body>
+</html>
