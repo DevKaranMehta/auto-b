@@ -1,0 +1,409 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Trending Topics{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">🔥 Trending Topics Management</h1>
+    <div class="space-x-4">
+        <form method="POST" action="/admin/trending/update-now" style="display: inline;">
+            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                🚀 Generate AI Topics
+            </button>
+        </form>
+        {% if not trending_topics %}
+        <form method="POST" action="/admin/trending/add-sample" style="display: inline;">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                ➕ Add Sample Topics
+            </button>
+        </form>
+        {% endif %}
+        <button onclick="openAddTopicModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            ➕ Add New Topic
+        </button>
+        <a href="/admin/ai-generate" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+            🤖 Generate Blog
+        </a>
+    </div>
+</div>
+
+<!-- Success/Error Messages -->
+{% if request.query_params.get('success') %}
+<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+    ✅ {{ request.query_params.get('success') }}
+</div>
+{% endif %}
+
+{% if request.query_params.get('error') %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    ❌ {{ request.query_params.get('error') }}
+</div>
+{% endif %}
+
+<!-- Topics Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-blue-500">
+        <h3 class="text-lg font-bold text-blue-600 mb-2">📈 Total Topics</h3>
+        <p class="text-3xl font-bold">{{ pagination.total_count }}</p>
+        <p class="text-gray-600 text-sm">
+            {% if pagination.search %}
+                Filtered results
+            {% else %}
+                Active trending topics
+            {% endif %}
+        </p>
+    </div>
+    
+    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-green-500">
+        <h3 class="text-lg font-bold text-green-600 mb-2">🔥 High Relevance</h3>
+        <p class="text-3xl font-bold">{{ all_topics|selectattr("relevance_score", "gt", 80)|list|length }}</p>
+        <p class="text-gray-600 text-sm">Score > 80</p>
+    </div>
+    
+    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-yellow-500">
+        <h3 class="text-lg font-bold text-yellow-600 mb-2">📝 Recent Used</h3>
+        <p class="text-3xl font-bold">{{ all_topics|selectattr("last_used")|list|length }}</p>
+        <p class="text-gray-600 text-sm">Used for blogs</p>
+    </div>
+    
+    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-purple-500">
+        <h3 class="text-lg font-bold text-purple-600 mb-2">⭐ Average Score</h3>
+        <p class="text-3xl font-bold">
+            {% if all_topics %}
+                {{ ((all_topics|sum(attribute='relevance_score')) / (all_topics|length))|round|int }}
+            {% else %}
+                0
+            {% endif %}
+        </p>
+        <p class="text-gray-600 text-sm">Relevance score</p>
+    </div>
+</div>
+
+<!-- Search and Filter Controls -->
+<div class="bg-white rounded-lg shadow-lg mb-6">
+    <div class="p-6">
+        <form method="GET" class="flex flex-wrap gap-4 items-end">
+            <div class="flex-1 min-w-64">
+                <label class="block text-sm font-medium text-gray-700 mb-2">🔍 Search Topics</label>
+                <input type="text" name="search" value="{{ pagination.search }}" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Search by topic name or relevance score...">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">📊 Sort By</label>
+                <select name="sort_by" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="relevance_score" {% if pagination.sort_by == 'relevance_score' %}selected{% endif %}>Relevance Score</option>
+                    <option value="created_at" {% if pagination.sort_by == 'created_at' %}selected{% endif %}>Created Date</option>
+                    <option value="last_used" {% if pagination.sort_by == 'last_used' %}selected{% endif %}>Last Used</option>
+                    <option value="search_volume" {% if pagination.sort_by == 'search_volume' %}selected{% endif %}>Search Volume</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">📈 Order</label>
+                <select name="order" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="desc" {% if pagination.order == 'desc' %}selected{% endif %}>Descending</option>
+                    <option value="asc" {% if pagination.order == 'asc' %}selected{% endif %}>Ascending</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">📄 Per Page</label>
+                <select name="per_page" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="10" {% if pagination.per_page == 10 %}selected{% endif %}>10</option>
+                    <option value="20" {% if pagination.per_page == 20 %}selected{% endif %}>20</option>
+                    <option value="50" {% if pagination.per_page == 50 %}selected{% endif %}>50</option>
+                    <option value="100" {% if pagination.per_page == 100 %}selected{% endif %}>100</option>
+                </select>
+            </div>
+            
+            <div class="space-x-2">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                    🔍 Search
+                </button>
+                <a href="/admin/trending-topics" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md inline-block">
+                    🔄 Reset
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="bg-white rounded-lg shadow-lg">
+    <div class="p-6 border-b">
+        <h2 class="text-xl font-bold">
+            Trending Topics 
+            ({{ pagination.total_count }} total{% if pagination.search %}, filtered by "{{ pagination.search }}"{% endif %})
+        </h2>
+        <p class="text-gray-600 mt-2">
+            Showing {{ trending_topics|length }} topics on page {{ pagination.page }} of {{ pagination.total_pages }}
+        </p>
+    </div>
+    <div class="p-6">
+        {% if trending_topics %}
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="px-4 py-2 text-left">Topic</th>
+                        <th class="px-4 py-2 text-left">Relevance Score</th>
+                        <th class="px-4 py-2 text-left">Search Volume</th>
+                        <th class="px-4 py-2 text-left">Created</th>
+                        <th class="px-4 py-2 text-left">Last Used</th>
+                        <th class="px-4 py-2 text-left">Status</th>
+                        <th class="px-4 py-2 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for topic in trending_topics %}
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-4 py-2">
+                            <div class="font-medium">{{ topic.topic }}</div>
+                        </td>
+                        <td class="px-4 py-2">
+                            <div class="flex items-center">
+                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: {{ topic.relevance_score }}%"></div>
+                                </div>
+                                <span class="text-sm font-medium">{{ topic.relevance_score }}</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-2">{{ "{:,}".format(topic.search_volume) }}</td>
+                        <td class="px-4 py-2 text-sm">{{ topic.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td class="px-4 py-2 text-sm">
+                            {% if topic.last_used %}
+                            <span class="text-green-600">{{ topic.last_used.strftime('%Y-%m-%d %H:%M') }}</span>
+                            {% else %}
+                            <span class="text-gray-400">Never used</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2">
+                            {% if topic.relevance_score >= 80 %}
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">🔥 Hot</span>
+                            {% elif topic.relevance_score >= 60 %}
+                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">📈 Trending</span>
+                            {% else %}
+                            <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">📊 Normal</span>
+                            {% endif %}
+                            
+                            {% if topic.last_used %}
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm ml-1">✅ Used</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2">
+                            <div class="flex space-x-2">
+                                <button onclick="editTopic({{ topic.id }}, '{{ topic.topic }}', {{ topic.relevance_score }}, {{ topic.search_volume }})" class="text-blue-600 hover:underline text-sm">
+                                    ✏️ Edit
+                                </button>
+                                <button onclick="deleteTopic({{ topic.id }}, '{{ topic.topic }}')" class="text-red-600 hover:underline text-sm">
+                                    🗑️ Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if pagination.total_pages > 1 %}
+        <div class="mt-6 flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+                Showing {{ ((pagination.page - 1) * pagination.per_page) + 1 }} to 
+                {{ pagination.page * pagination.per_page if pagination.page * pagination.per_page < pagination.total_count else pagination.total_count }} 
+                of {{ pagination.total_count }} results
+            </div>
+            
+            <div class="flex space-x-2">
+                {% if pagination.has_prev %}
+                <a href="?page={{ pagination.prev_page }}&per_page={{ pagination.per_page }}&search={{ pagination.search }}&sort_by={{ pagination.sort_by }}&order={{ pagination.order }}" 
+                   class="px-3 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                    ← Previous
+                </a>
+                {% endif %}
+                
+                {% for page_num in pagination.page_numbers %}
+                <a href="?page={{ page_num }}&per_page={{ pagination.per_page }}&search={{ pagination.search }}&sort_by={{ pagination.sort_by }}&order={{ pagination.order }}" 
+                   class="px-3 py-2 {% if page_num == pagination.page %}bg-blue-600 text-white{% else %}bg-gray-200 text-gray-700 hover:bg-gray-300{% endif %} rounded">
+                    {{ page_num }}
+                </a>
+                {% endfor %}
+                
+                {% if pagination.has_next %}
+                <a href="?page={{ pagination.next_page }}&per_page={{ pagination.per_page }}&search={{ pagination.search }}&sort_by={{ pagination.sort_by }}&order={{ pagination.order }}" 
+                   class="px-3 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                    Next →
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Enhanced Empty State -->
+        <div class="text-center py-12 text-gray-500">
+            <div class="max-w-md mx-auto">
+                <div class="mb-6">
+                    <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">
+                    {% if pagination.search %}
+                        No topics found for "{{ pagination.search }}"
+                    {% else %}
+                        No Trending Topics Found
+                    {% endif %}
+                </h3>
+                <div class="space-y-3">
+                    {% if pagination.search %}
+                    <a href="/admin/trending-topics" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">
+                        🔄 Clear Search
+                    </a>
+                    {% else %}
+                    <form method="POST" action="/admin/trending/add-sample" style="display: inline;">
+                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold">
+                            ➕ Add Sample Topics
+                        </button>
+                    </form>
+                    <br>
+                    <form method="POST" action="/admin/trending/update-now" style="display: inline;">
+                        <button type="submit" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold">
+                            🚀 Generate AI Topics
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Add Topic Modal -->
+<div id="addTopicModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-bold mb-4">➕ Add New Trending Topic</h3>
+            <form method="POST" action="/admin/trending/add-topic">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Topic</label>
+                        <input type="text" name="topic" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter trending topic...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Relevance Score (1-100)</label>
+                        <input type="number" name="relevance_score" min="1" max="100" value="75" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Search Volume</label>
+                        <input type="number" name="search_volume" min="0" value="5000" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="closeAddTopicModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Add Topic
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Topic Modal -->
+<div id="editTopicModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-bold mb-4">✏️ Edit Trending Topic</h3>
+            <form method="POST" action="/admin/trending/edit-topic">
+                <input type="hidden" name="topic_id" id="editTopicId">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Topic</label>
+                        <input type="text" name="topic" id="editTopicText" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Relevance Score (1-100)</label>
+                        <input type="number" name="relevance_score" id="editRelevanceScore" min="1" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Search Volume</label>
+                        <input type="number" name="search_volume" id="editSearchVolume" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="closeEditTopicModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Update Topic
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Modal functions
+function openAddTopicModal() {
+    document.getElementById('addTopicModal').classList.remove('hidden');
+}
+
+function closeAddTopicModal() {
+    document.getElementById('addTopicModal').classList.add('hidden');
+}
+
+function editTopic(id, topic, relevance_score, search_volume) {
+    document.getElementById('editTopicId').value = id;
+    document.getElementById('editTopicText').value = topic;
+    document.getElementById('editRelevanceScore').value = relevance_score;
+    document.getElementById('editSearchVolume').value = search_volume;
+    document.getElementById('editTopicModal').classList.remove('hidden');
+}
+
+function closeEditTopicModal() {
+    document.getElementById('editTopicModal').classList.add('hidden');
+}
+
+function deleteTopic(id, topic) {
+    if (confirm(`Are you sure you want to delete "${topic}"?\n\nThis action cannot be undone.`)) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/admin/trending/delete-topic';
+        
+        const topicIdInput = document.createElement('input');
+        topicIdInput.type = 'hidden';
+        topicIdInput.name = 'topic_id';
+        topicIdInput.value = id;
+        
+        form.appendChild(topicIdInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Close modals when clicking outside
+document.addEventListener('click', function(event) {
+    const addModal = document.getElementById('addTopicModal');
+    const editModal = document.getElementById('editTopicModal');
+    
+    if (event.target === addModal) {
+        closeAddTopicModal();
+    }
+    if (event.target === editModal) {
+        closeEditTopicModal();
+    }
+});
+
+// Auto-refresh every 60 seconds if on the trending topics page
+if (window.location.pathname.includes('trending-topics')) {
+    console.log('🔥 Trending Topics page loaded with pagination - Auto-refresh enabled');
+}
+</script>
+{% endblock %}

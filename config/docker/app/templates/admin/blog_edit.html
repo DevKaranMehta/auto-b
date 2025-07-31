@@ -1,0 +1,251 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Edit Blog - {{ blog.title }}{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">✏️ Edit Blog Post</h1>
+    <div class="space-x-4">
+        <a href="/admin/blogs" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+            ← Back to Blogs
+        </a>
+        <a href="/blog/{{ blog.slug }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            👁️ Preview
+        </a>
+    </div>
+</div>
+
+<!-- Success/Error Messages -->
+{% if request.query_params.get('success') %}
+<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+    {{ request.query_params.get('success') }}
+</div>
+{% endif %}
+
+{% if request.query_params.get('error') %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    {{ request.query_params.get('error') }}
+</div>
+{% endif %}
+
+<div class="bg-white rounded-lg shadow-lg">
+    <div class="p-6">
+        <form method="POST" action="/admin/blogs/edit/{{ blog.id }}" class="space-y-6">
+            <!-- Title with AI Generate -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-700">📝 Blog Title *</label>
+                    <button type="button" onclick="generateAIContent('title')" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm">
+                        🤖 AI Generate Title
+                    </button>
+                </div>
+                <input type="text" name="title" id="titleField" value="{{ blog.title }}" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <small class="text-gray-500">SEO-optimized title (50-60 characters recommended)</small>
+            </div>
+
+            <!-- Content -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">📄 Blog Content *</label>
+                <textarea name="content" rows="20" required 
+                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ blog.content }}</textarea>
+                <small class="text-gray-500">Full blog content with HTML formatting</small>
+            </div>
+
+            <!-- SEO Meta Description with AI Generate -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-700">🔍 Meta Description</label>
+                    <button type="button" onclick="generateAIContent('description')" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm">
+                        🤖 AI Generate Description
+                    </button>
+                </div>
+                <textarea name="meta_description" id="descriptionField" rows="3" 
+                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                          placeholder="SEO meta description for search engines">{{ blog.meta_description }}</textarea>
+                <small class="text-gray-500">SEO description (150-160 characters recommended)</small>
+                <div class="mt-1">
+                    <span class="text-xs text-gray-500">Character count: </span>
+                    <span id="descriptionCount" class="text-xs font-medium">{{ blog.meta_description|length if blog.meta_description else 0 }}</span>
+                </div>
+            </div>
+
+            <!-- SEO Keywords with AI Generate -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-700">🏷️ Meta Keywords</label>
+                    <button type="button" onclick="generateAIContent('keywords')" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm">
+                        🤖 AI Generate Keywords
+                    </button>
+                </div>
+                <input type="text" name="meta_keywords" id="keywordsField" value="{{ blog.meta_keywords }}" 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                       placeholder="blockchain, cryptocurrency, bitcoin, etc.">
+                <small class="text-gray-500">Comma-separated keywords for SEO</small>
+            </div>
+
+            <!-- Category and Tags -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📂 Category</label>
+                    <select name="category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Technology" {% if blog.category == 'Technology' %}selected{% endif %}>🔧 Technology</option>
+                        <option value="Market Analysis" {% if blog.category == 'Market Analysis' %}selected{% endif %}>📈 Market Analysis</option>
+                        <option value="DeFi" {% if blog.category == 'DeFi' %}selected{% endif %}>🏦 DeFi</option>
+                        <option value="NFTs" {% if blog.category == 'NFTs' %}selected{% endif %}>🎨 NFTs</option>
+                        <option value="Regulation" {% if blog.category == 'Regulation' %}selected{% endif %}>⚖️ Regulation</option>
+                        <option value="Trading" {% if blog.category == 'Trading' %}selected{% endif %}>💹 Trading</option>
+                        <option value="Investment" {% if blog.category == 'Investment' %}selected{% endif %}>💰 Investment</option>
+                        <option value="News" {% if blog.category == 'News' %}selected{% endif %}>📰 News</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">🏷️ Tags</label>
+                    <input type="text" name="tags" value="{{ blog.tags }}" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                           placeholder="blockchain, crypto, news">
+                    <small class="text-gray-500">Comma-separated tags</small>
+                </div>
+            </div>
+
+            <!-- Publishing Options -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-center">
+                    <input type="checkbox" name="is_published" id="is_published" {% if blog.is_published %}checked{% endif %}
+                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="is_published" class="ml-2 block text-sm text-gray-700">
+                        ✅ Published (visible to public)
+                    </label>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" name="is_featured" id="is_featured" {% if blog.is_featured %}checked{% endif %}
+                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="is_featured" class="ml-2 block text-sm text-gray-700">
+                        ⭐ Featured (highlighted on homepage)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-4 pt-6 border-t">
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg">
+                    ✅ Update Blog Post
+                </button>
+                <a href="/admin/blogs" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg">
+                    ❌ Cancel
+                </a>
+                <button type="button" onclick="deleteBlog({{ blog.id }})" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg ml-auto">
+                    🗑️ Delete Blog
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- AI Generation Status -->
+<div id="aiGenerationStatus" class="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg" style="display: none;">
+    <div class="flex items-center">
+        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+        <span>Generating AI content...</span>
+    </div>
+</div>
+
+<script>
+// Character counter for meta description
+document.getElementById('descriptionField').addEventListener('input', function() {
+    const count = this.value.length;
+    const counter = document.getElementById('descriptionCount');
+    counter.textContent = count;
+    
+    // Color coding based on optimal length
+    if (count >= 150 && count <= 160) {
+        counter.className = 'text-xs font-medium text-green-600';
+    } else if (count >= 140 && count <= 170) {
+        counter.className = 'text-xs font-medium text-yellow-600';
+    } else {
+        counter.className = 'text-xs font-medium text-red-600';
+    }
+});
+
+async function generateAIContent(field) {
+    const statusDiv = document.getElementById('aiGenerationStatus');
+    const titleField = document.getElementById('titleField');
+    const descriptionField = document.getElementById('descriptionField');
+    const keywordsField = document.getElementById('keywordsField');
+    const contentField = document.querySelector('textarea[name="content"]');
+    const categoryField = document.querySelector('select[name="category"]');
+    
+    // Show loading status
+    statusDiv.style.display = 'block';
+    
+    try {
+        const formData = new FormData();
+        formData.append('field', field);
+        formData.append('current_content', contentField.value);
+        formData.append('blog_title', titleField.value);
+        formData.append('blog_category', categoryField.value);
+        
+        const response = await fetch('/admin/blogs/ai-generate-meta', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Update the specific field
+            if (field === 'title') {
+                titleField.value = result.content;
+            } else if (field === 'description') {
+                descriptionField.value = result.content;
+                // Trigger character count update
+                descriptionField.dispatchEvent(new Event('input'));
+            } else if (field === 'keywords') {
+                keywordsField.value = result.content;
+            }
+            
+            // Show success
+            showNotification(`✅ AI generated ${field} successfully!`, 'success');
+        } else {
+            showNotification(`❌ Failed to generate ${field}: ${result.error}`, 'error');
+        }
+        
+    } catch (error) {
+        console.error('AI generation error:', error);
+        showNotification(`❌ Failed to generate ${field}. Please try again.`, 'error');
+    } finally {
+        statusDiv.style.display = 'none';
+    }
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } text-white`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+function deleteBlog(blogId) {
+    if (confirm('Are you sure you want to delete this blog post? This action cannot be undone.')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/blogs/delete/${blogId}`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Initialize character counter
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('descriptionField').dispatchEvent(new Event('input'));
+});
+</script>
+{% endblock %}

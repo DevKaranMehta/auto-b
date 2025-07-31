@@ -1,0 +1,37 @@
+# Environment files
+.env
+*.env
+
+# Database files
+data/
+*.sql
+
+# Log files
+logs/
+*.log
+
+# Backup files
+backups/
+*.tar.gz
+*.zip
+
+# Docker volumes
+volumes/
+
+# Temporary files
+temp_*
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (for n8n)
+node_modules/
+package-lock.json

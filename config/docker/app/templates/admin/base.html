@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %} - BlockchainLatestNews</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <div class="flex">
+            <!-- Common Admin Sidebar -->
+            <nav class="w-64 bg-gray-800 text-white min-h-screen fixed">
+                <div class="p-4 border-b border-gray-700">
+                    <h2 class="text-xl font-bold text-yellow-400">📊 Admin Panel</h2>
+                    <p class="text-sm text-gray-400 mt-1">BlockchainLatestNews CMS</p>
+                </div>
+                <ul class="mt-4">
+                    <li><a href="/admin" class="block p-3 hover:bg-gray-700 {% if request.url.path == '/admin' or request.url.path == '/admin/' %}bg-gray-700{% endif %}">🏠 Dashboard</a></li>
+                    <li><a href="/admin/blogs" class="block p-3 hover:bg-gray-700 {% if '/blogs' in request.url.path %}bg-gray-700{% endif %}">📝 Manage Blogs</a></li>
+                    <li><a href="/admin/ai-generate" class="block p-3 hover:bg-gray-700 {% if '/ai-generate' in request.url.path %}bg-gray-700{% endif %}">🤖 AI Generate</a></li>
+                    <li><a href="/admin/newsletters" class="block p-3 hover:bg-gray-700 {% if '/newsletters' in request.url.path %}bg-gray-700{% endif %}">📧 Newsletters</a></li>
+                    <li><a href="/admin/trending-topics" class="block p-3 hover:bg-gray-700 {% if '/trending-topics' in request.url.path %}bg-gray-700{% endif %}">🔥 Trending Topics</a></li>
+                    <li><a href="/admin/scheduler" class="block p-3 hover:bg-gray-700 {% if '/scheduler' in request.url.path %}bg-gray-700{% endif %}">⏰ Scheduler</a></li>
+                    <li class="border-t border-gray-700 mt-4 pt-4">
+                        <a href="/" class="block p-3 hover:bg-gray-700 text-green-400">🌐 View Website</a>
+                    </li>
+                    <li><a href="/health" class="block p-3 hover:bg-gray-700 text-blue-400" target="_blank">💡 API Status</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Main Content -->
+            <main class="flex-1 ml-64 p-8">
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+{% extends "admin/base.html" %}
+
+{% block title %}AI Blog Generator{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8">🤖 AI Blog Generator</h1>
+
+<div class="bg-white rounded-lg shadow-lg">
+    <div class="p-6 border-b">
+        <h2 class="text-xl font-bold">Generate New Blog Post</h2>
+        <p class="text-gray-600 mt-2">Use AI to create high-quality blockchain content automatically</p>
+    </div>
+    <div class="p-6">
+        <form method="POST" action="/admin/ai-generate" class="space-y-6">
+            <div>
+                <label for="topic" class="block text-sm font-medium text-gray-700 mb-2">
+                    📝 Blog Topic *
+                </label>
+                <input 
+                    type="text" 
+                    id="topic" 
+                    name="topic" 
+                    required
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter a blockchain/crypto topic (e.g., 'Bitcoin ETF Impact on Markets')"
+                >
+            </div>
+            
+            <div>
+                <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                    📂 Category
+                </label>
+                <select 
+                    id="category" 
+                    name="category"
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                    <option value="Technology">🔧 Technology</option>
+                    <option value="Market Analysis">📈 Market Analysis</option>
+                    <option value="DeFi">🏦 DeFi</option>
+                    <option value="NFTs">🎨 NFTs</option>
+                    <option value="Regulation">⚖️ Regulation</option>
+                    <option value="Trading">💹 Trading</option>
+                    <option value="Investment">💰 Investment</option>
+                    <option value="News">📰 News</option>
+                </select>
+            </div>
+            
+            <div class="flex items-center">
+                <input 
+                    type="checkbox" 
+                    id="auto_publish" 
+                    name="auto_publish"
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                >
+                <label for="auto_publish" class="ml-2 block text-sm text-gray-700">
+                    ✅ Auto-publish after generation
+                </label>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button 
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
+                >
+                    🤖 Generate Blog Post
+                </button>
+                <a 
+                    href="/admin/blogs"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
+                >
+                    📝 Manage Blogs
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Trending Topics Suggestions -->
+{% if trending_topics %}
+<div class="bg-white rounded-lg shadow-lg mt-8">
+    <div class="p-6 border-b">
+        <h2 class="text-xl font-bold">🔥 Trending Topics</h2>
+        <p class="text-gray-600 mt-2">Click on any topic to use it</p>
+    </div>
+    <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for topic in trending_topics %}
+            <div 
+                class="p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition duration-200"
+                onclick="document.getElementById('topic').value = '{{ topic.topic }}'"
+            >
+                <h3 class="font-semibold text-gray-800">{{ topic.topic }}</h3>
+                <p class="text-sm text-gray-600 mt-1">Score: {{ topic.relevance_score }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- AI Generation Tips -->
+<div class="bg-blue-50 rounded-lg border border-blue-200 mt-8">
+    <div class="p-6">
+        <h3 class="text-lg font-bold text-blue-900 mb-4">💡 AI Generation Tips</h3>
+        <ul class="space-y-2 text-blue-800">
+            <li>• Be specific with your topic for better content quality</li>
+            <li>• Include market context or recent events in your topic</li>
+            <li>• The AI will automatically generate SEO-optimized meta tags</li>
+            <li>• Generated content includes proper HTML formatting</li>
+            <li>• Each post gets a unique slug and relevant tags</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

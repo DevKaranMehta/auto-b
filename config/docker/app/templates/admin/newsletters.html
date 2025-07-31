@@ -1,0 +1,48 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Newsletter Management{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8">📧 Newsletter Management</h1>
+
+<div class="bg-white rounded-lg shadow-lg">
+    <div class="p-6 border-b">
+        <h2 class="text-xl font-bold">Subscribers ({{ subscribers|length }})</h2>
+    </div>
+    <div class="p-6">
+        {% if subscribers %}
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="px-4 py-2 text-left">Email</th>
+                        <th class="px-4 py-2 text-left">Status</th>
+                        <th class="px-4 py-2 text-left">Subscribed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subscriber in subscribers %}
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-4 py-2 font-mono">{{ subscriber.email }}</td>
+                        <td class="px-4 py-2">
+                            {% if subscriber.is_active %}
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">✅ Active</span>
+                            {% else %}
+                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-sm">❌ Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2">{{ subscriber.subscribed_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-8 text-gray-500">
+            <h3 class="text-lg font-semibold mb-2">No newsletter subscribers yet!</h3>
+            <p>When people subscribe to your newsletter, they'll appear here.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
