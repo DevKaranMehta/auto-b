@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disclaimer - BlockchainLatestNews</title>
+    <meta name="description" content="Disclaimer for BlockchainLatestNews - Important information about cryptocurrency news and investment risks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #F0B90B;
+            --dark-bg: #0B0E11;
+            --darker-bg: #1E2329;
+            --surface-dark: #2B3139;
+            --border-dark: #474D57;
+            --text-primary: #FAFAFA;
+            --text-secondary: #C7C7C7;
+            --text-muted: #848E9C;
+            --error: #F6465D;
+            --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            --radius: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(11, 14, 17, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--primary-gold);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover { text-shadow: 0 0 20px rgba(240, 185, 11, 0.3); }
+
+        .back-link {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--primary-gold);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #F0B90B 0%, #FCD535 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .last-updated {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin: 2.5rem 0 1rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 2rem 0 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: var(--surface-dark);
+            border-left: 4px solid var(--primary-gold);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: var(--radius);
+        }
+
+        .warning-box {
+            background: rgba(246, 70, 93, 0.1);
+            border: 2px solid var(--error);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: var(--radius-lg);
+        }
+
+        .warning-box h3 {
+            color: var(--error);
+            margin-top: 0;
+        }
+
+        .contact-info {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-dark);
+            padding: 2rem;
+            margin: 3rem 0;
+            border-radius: var(--radius-lg);
+        }
+
+        .contact-info h3 {
+            margin-top: 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .container { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="logo">BlockchainLatestNews</a>
+            <a href="/" class="back-link">← Back to Home</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Disclaimer</h1>
+        <p class="last-updated"><strong>Last Updated:</strong> January 2025</p>
+
+        <div class="warning-box">
+            <h3>⚠️ IMPORTANT DISCLAIMER</h3>
+            <p><strong>BlockchainLatestNews is NOT a financial advisor. Nothing on this website should be considered as financial, investment, tax, or legal advice.</strong></p>
+            <p>Cryptocurrency investments are highly volatile and risky. You could lose all of your invested capital. Always conduct thorough research and consult with qualified professionals before making any investment decisions.</p>
+        </div>
+
+        <h2>1. General Information Purpose</h2>
+
+        <p>BlockchainLatestNews is an informational and educational platform that provides:</p>
+        <ul>
+            <li>News and updates about blockchain technology and cryptocurrencies</li>
+            <li>Market analysis and insights</li>
+            <li>Aggregated content from various crypto news sources</li>
+            <li>Educational articles about blockchain and Web3 technology</li>
+        </ul>
+
+        <p><strong>All content is provided for informational purposes only and should not be relied upon as the sole basis for any investment decision.</strong></p>
+
+        <h2>2. No Financial or Investment Advice</h2>
+
+        <p>The information, opinions, and analysis presented on BlockchainLatestNews do NOT constitute:</p>
+        <ul>
+            <li>Financial advice, investment recommendations, or trading signals</li>
+            <li>Professional financial planning or portfolio management</li>
+            <li>Tax, accounting, or legal guidance</li>
+            <li>Endorsements or recommendations to buy, sell, or hold any cryptocurrency or blockchain asset</li>
+            <li>Solicitations to invest in any specific project, token, or platform</li>
+        </ul>
+
+        <h2>3. Investment Risks</h2>
+
+        <div class="warning-box">
+            <h3>Cryptocurrency Investment Risks</h3>
+            <p>Investing in cryptocurrencies, tokens, NFTs, and blockchain projects involves substantial risk, including but not limited to:</p>
+            <ul>
+                <li><strong>High Volatility:</strong> Prices can fluctuate dramatically in short periods</li>
+                <li><strong>Total Loss of Capital:</strong> You may lose your entire investment</li>
+                <li><strong>Regulatory Risk:</strong> Government regulations can change rapidly and impact crypto markets</li>
+                <li><strong>Security Risks:</strong> Hacks, scams, and fraud are prevalent in the crypto space</li>
+                <li><strong>Liquidity Risk:</strong> Some assets may be difficult to sell quickly</li>
+                <li><strong>Technology Risk:</strong> Smart contract bugs, network failures, and technical vulnerabilities</li>
+                <li><strong>Market Manipulation:</strong> Pump-and-dump schemes and coordinated market manipulation</li>
+            </ul>
+        </div>
+
+        <h2>4. No Guarantees or Warranties</h2>
+
+        <p>BlockchainLatestNews makes NO guarantees, representations, or warranties regarding:</p>
+        <ul>
+            <li>The accuracy, completeness, or timeliness of information</li>
+            <li>Future price movements or investment returns</li>
+            <li>The success or failure of any blockchain project or cryptocurrency</li>
+            <li>The legitimacy or security of any mentioned projects or platforms</li>
+        </ul>
+
+        <p><strong>Past performance is not indicative of future results.</strong></p>
+
+        <h2>5. Third-Party Content and Links</h2>
+
+        <p>Our website aggregates content from various sources and may contain links to third-party websites, exchanges, wallets, and blockchain projects. We do NOT:</p>
+        <ul>
+            <li>Endorse, verify, or validate any third-party content or services</li>
+            <li>Take responsibility for the accuracy of external content</li>
+            <li>Guarantee the security or legitimacy of linked platforms</li>
+            <li>Accept liability for losses from third-party services</li>
+        </ul>
+
+        <p><strong>Always conduct independent research and due diligence before interacting with any third-party platform.</strong></p>
+
+        <h2>6. AI-Generated Content</h2>
+
+        <p>Some content on BlockchainLatestNews may be generated or enhanced using artificial intelligence (AI) technologies. While we strive for accuracy, AI-generated content:</p>
+        <ul>
+            <li>May contain errors, inaccuracies, or outdated information</li>
+            <li>Should not be relied upon as the sole source of information</li>
+            <li>Requires verification from multiple authoritative sources</li>
+        </ul>
+
+        <h2>7. Market Data and Analysis</h2>
+
+        <p>Market data, price charts, and technical analysis provided on our website are for informational purposes only. We are NOT responsible for:</p>
+        <ul>
+            <li>Delayed or inaccurate market data</li>
+            <li>Trading losses based on our analysis or data</li>
+            <li>Errors in calculations or projections</li>
+        </ul>
+
+        <p><strong>Always verify market data from official exchange sources before making trading decisions.</strong></p>
+
+        <h2>8. Regulatory Compliance</h2>
+
+        <p>BlockchainLatestNews is NOT:</p>
+        <ul>
+            <li>A registered investment advisor, broker-dealer, or financial institution</li>
+            <li>Licensed to provide financial, legal, or tax advice</li>
+            <li>Regulated by financial authorities (SEC, FCA, etc.)</li>
+        </ul>
+
+        <p>Cryptocurrency regulations vary by jurisdiction. It is YOUR responsibility to understand and comply with applicable laws in your country or region.</p>
+
+        <h2>9. Do Your Own Research (DYOR)</h2>
+
+        <div class="highlight-box">
+            <p><strong>Critical Reminder:</strong> Before investing in any cryptocurrency, blockchain project, or digital asset:</p>
+            <ul>
+                <li>Conduct thorough independent research</li>
+                <li>Verify information from multiple credible sources</li>
+                <li>Understand the underlying technology and use case</li>
+                <li>Read project whitepapers and audit reports</li>
+                <li>Assess team credibility and track records</li>
+                <li>Consider your risk tolerance and financial situation</li>
+                <li>Never invest more than you can afford to lose</li>
+                <li>Consult with qualified financial professionals</li>
+            </ul>
+        </div>
+
+        <h2>10. Scam Warning</h2>
+
+        <p>The cryptocurrency space is rife with scams, fraud, and malicious actors. Be cautious of:</p>
+        <ul>
+            <li>Ponzi schemes and "get rich quick" promises</li>
+            <li>Fake giveaways and phishing attempts</li>
+            <li>Pump-and-dump schemes</li>
+            <li>Rug pulls and exit scams</li>
+            <li>Impersonators claiming to be BlockchainLatestNews</li>
+        </ul>
+
+        <p><strong>We will NEVER ask you for private keys, seed phrases, or passwords. We will NEVER solicit investments or promise guaranteed returns.</strong></p>
+
+        <h2>11. Personal Responsibility</h2>
+
+        <p>By using BlockchainLatestNews, you acknowledge that:</p>
+        <ul>
+            <li>You are solely responsible for your investment decisions</li>
+            <li>You understand and accept the risks of cryptocurrency investments</li>
+            <li>You will not hold BlockchainLatestNews liable for any losses</li>
+            <li>You will conduct independent research before investing</li>
+        </ul>
+
+        <h2>12. Changes to Disclaimer</h2>
+
+        <p>We reserve the right to update this Disclaimer at any time without prior notice. Changes will be effective immediately upon posting. Your continued use of the website constitutes acceptance of the updated Disclaimer.</p>
+
+        <h2>13. Professional Advice</h2>
+
+        <p>Before making any financial decisions, we strongly recommend consulting with:</p>
+        <ul>
+            <li><strong>Financial Advisors:</strong> For investment planning and portfolio management</li>
+            <li><strong>Tax Professionals:</strong> For crypto tax implications and reporting</li>
+            <li><strong>Legal Counsel:</strong> For regulatory compliance and legal matters</li>
+        </ul>
+
+        <h2>14. Contact Information</h2>
+
+        <div class="contact-info">
+            <h3>Questions About This Disclaimer?</h3>
+            <p>If you have questions or need clarification about this Disclaimer, please contact us:</p>
+            <ul>
+                <li><strong>Email:</strong> info@blockchainlatestnews.com</li>
+                <li><strong>Website:</strong> <a href="/" style="color: var(--primary-gold);">blockchainlatestnews.com</a></li>
+            </ul>
+            <p><em>Please allow up to 7 business days for a response.</em></p>
+        </div>
+
+        <div class="warning-box">
+            <h3>Final Warning</h3>
+            <p><strong>CRYPTOCURRENCY INVESTMENTS CARRY SIGNIFICANT RISK. ONLY INVEST WHAT YOU CAN AFFORD TO LOSE.</strong></p>
+            <p>BlockchainLatestNews and its operators shall NOT be held liable for any investment losses, damages, or consequences arising from your use of information on this website.</p>
+            <p><strong>By using this website, you acknowledge and accept these terms.</strong></p>
+        </div>
+    </div>
+</body>
+</html>
